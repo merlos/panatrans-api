@@ -1,0 +1,10 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+albrook_miraflores:
+  name: Albrook-Miraflores
+
+albrook_maranon:
+  name: Albrook-Marañón
+
+another_route:
+  name: Route three name

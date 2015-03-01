@@ -1,0 +1,22 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+albrook_miraflores:
+  headsign: hacia Miraflores
+  route: albrook_miraflores
+  direction: 0
+
+miraflores_albrook:
+  headsign: hacia Albrook
+  route: albrook_miraflores
+  direction: 1 
+
+albrook_maranon:
+  headsign: hacia Marañón
+  route: albrook_maranon
+  direction: 0
+
+maranon_albrook:
+  headsign: hacia Albrook
+  route: albrook_maranon
+  direction: 1
+
