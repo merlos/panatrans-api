@@ -1,9 +1,10 @@
 Rails.application.routes.draw do
   namespace :v1 do
-    resources :routes, only: [:index, :show, :create, :update, :destroy], :defaults => { :format => 'json' }
-    resources :stops, only: [:index, :show, :create, :update, :destroy], :defaults => { :format => 'json' }
-    resources :trips, only: [:index, :show, :create, :update, :destroy], :defaults => { :format => 'json' }
-    resources :stop_sequences, only: [:index, :show, :create, :update, :destroy], :defaults => { :format => 'json' }
+    resources :routes, only: [:index, :show, :create, :update, :destroy], defaults: { format: 'json' }
+    resources :stops, only: [:index, :show, :create, :update, :destroy], defaults: { format:'json' }
+    resources :trips, only: [:index, :show, :create, :update, :destroy], defaults: { format: 'json' }
+    resources :stop_sequences, only: [:index, :show, :create, :update, :destroy], defaults: { format: 'json' }
+    resources :balance, only: [:show], defaults: {format: 'json'}
   end
   
   # The priority is based upon order of creation: first created -> highest priority.
