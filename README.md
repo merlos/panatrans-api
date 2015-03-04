@@ -32,6 +32,27 @@ Gets all the routes ordered by name (alphabetical order)
 }
 ``` 
 
+#### Get /routes/with_trips
+Gets all the routes ordered alphabetically by name and includes the trips linked to each route.
+
+```
+{
+	status : "success"
+	data: [{
+		id: INT,  #route id
+		name: STRING, # "Route name"
+		trips: [{
+			id: INT, # trip id
+			headsign: STRING, # "hacia Albrook"
+			direction: INT, # 0=ida, 1= retorno
+		}, ...
+		]
+	}, ...
+	]	
+}
+			
+```
+
 ### GET /routes/:id
 Returns the information a route identified by `:id`.
 
@@ -45,7 +66,7 @@ Returns the information a route identified by `:id`.
     {
       id: INT              # 2, trip identifier
       headsign: STRING,    # "Hacia Miraflores"
-      direction: INT,      # 0 => ida, 1 => retorno
+      direction: INT,      # 0 =  ida, 1 = retorno
       stops: [{
         sequence: INT    # sequence,
         id: INT,         # 3 

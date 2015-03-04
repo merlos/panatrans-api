@@ -3,14 +3,16 @@ module V1
   class RoutesControllerTest < ActionController::TestCase
 
     # Rails Routes
+    test "should respond to route.index" do
+        assert_routing '/v1/routes', { format: 'json', controller: "v1/routes", action: "index" }
+    end
     
+    test "should respond to route.with_trips" do
+        assert_routing '/v1/routes/with_trips', { format: 'json', controller: "v1/routes", action: "with_trips" }
+    end
         
     test "should respond to route.show" do
         assert_routing '/v1/routes/1', { format: 'json', controller: "v1/routes", action: "show", id: "1" }
-    end
-    
-    test "should respond to route.index" do
-        assert_routing '/v1/routes', { format: 'json', controller: "v1/routes", action: "index" }
     end
     
     
@@ -23,12 +25,17 @@ module V1
       assert_not_nil assigns(:routes)
     end
   
+    test "should get list of routes with the trips linked to each route" do
+      xhr :get, :with_trips
+      assert_response :success
+      assert_not_nil assigns(:routes)
+    end
+    
     test "should get a route" do
       r = routes(:albrook_miraflores)
       xhr :get, :show, {id: r.id}
       assert_response :success
-      assert_not_nil assigns(:route)
-       
+      assert_not_nil assigns(:route)   
     end
     
     test "should create a route" do

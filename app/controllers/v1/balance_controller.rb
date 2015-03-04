@@ -2,8 +2,6 @@ module V1
   class BalanceController < ApplicationController
   
     def show
-      require 'nokogiri'
-      require 'open-uri'
     
       card_number = params[:id]
     

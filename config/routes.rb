@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
   namespace :v1 do
+    get "/routes/with_trips", :to => "routes#with_trips",  defaults: { format:'json' }
     resources :routes, only: [:index, :show, :create, :update, :destroy], defaults: { format: 'json' }
+    
+    
     resources :stops, only: [:index, :show, :create, :update, :destroy], defaults: { format:'json' }
     resources :trips, only: [:index, :show, :create, :update, :destroy], defaults: { format: 'json' }
     resources :stop_sequences, only: [:index, :show, :create, :update, :destroy], defaults: { format: 'json' }
-    resources :balance, only: [:show], defaults: {format: 'json'}
+    resources :balance, only: [:show], defaults: {format: 'json'}, constraints: {id: /[0-9]+/}
   end
   
   # The priority is based upon order of creation: first created -> highest priority.

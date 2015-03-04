@@ -6,6 +6,10 @@ module V1
       @routes = Route.all.order('name ASC')
     end
     
+    def with_trips
+      @routes = Route.all.includes(:trips).order('name ASC')
+    end
+    
     def show
     end
     
