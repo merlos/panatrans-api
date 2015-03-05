@@ -1,12 +1,13 @@
 Rails.application.routes.draw do
   namespace :v1 do
-    get "/routes/with_trips", :to => "routes#with_trips",  defaults: { format:'json' }
+    get "/routes/with_trips", to: "routes#with_trips",  defaults: { format:'json' }
+    
     resources :routes, only: [:index, :show, :create, :update, :destroy], defaults: { format: 'json' }
-    
-    
     resources :stops, only: [:index, :show, :create, :update, :destroy], defaults: { format:'json' }
     resources :trips, only: [:index, :show, :create, :update, :destroy], defaults: { format: 'json' }
     resources :stop_sequences, only: [:index, :show, :create, :update, :destroy], defaults: { format: 'json' }
+   
+    match "/stop_sequences/" => "stop_sequences#options", via: :options
     resources :balance, only: [:show], defaults: {format: 'json'}, constraints: {id: /[0-9]+/}
   end
   

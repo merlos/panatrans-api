@@ -6,6 +6,10 @@ module V1
       @stop_sequences = StopSequence.all
     end
     
+    def options
+      render nothing: true
+    end
+    
     def show
     end
     

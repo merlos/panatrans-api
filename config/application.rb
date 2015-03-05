@@ -23,7 +23,7 @@ module PanatransApi
     # accept CORS http://demisx.github.io/rails-api/2014/02/18/configure-accept-headers-cors.html
     config.action_dispatch.default_headers = {
       'Access-Control-Allow-Origin' => '*', #<-- instead of * you can set a domain
-      'Access-Control-Request-Method' => %w{GET POST PUT DELETE}.join(",") # use %w{GET POST OPTIONS}.join(",") to allow the other methods
+      'Access-Control-Request-Method' => %w{GET POST PUT OPTIONS DELETE}.join(",") # use %w{GET POST OPTIONS}.join(",") to allow the other methods
         }
     
   end
