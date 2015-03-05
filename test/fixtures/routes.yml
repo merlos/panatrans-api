@@ -6,5 +6,24 @@ albrook_miraflores:
 albrook_maranon:
   name: Albrook-Marañón
 
-another_route:
-  name: Route three name
+
+# without stop sequences
+
+albrook_panama_viejo:
+  name: Albrook-Panamá Viejo
+  
+albrook_tocumen:
+  name: Albrook-Tocumen
+
+tocumen_tumba_muerto_albrook:
+  name: Tocumen-Tumba Muerto-Albrook
+  
+san_pedro_via_espana:
+  name: San Pedro-Vía España
+
+via_brasil_federico_boyd:
+  name: Vía Brasil-Federico Boyd
+
+paitilla_plaza_edison_via_brasil:
+  name: Paitilla-Plaza Edison-Vía Brasil
+

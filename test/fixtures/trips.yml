@@ -20,3 +20,54 @@ maranon_albrook:
   route: albrook_maranon
   direction: 1
 
+albrook_panama_viejo:
+  headsign: hacia Panamá Viejo
+  route: albrook_panama_viejo
+  direction: 0
+  
+panama_viejo_albrook: 
+  headsign: hacia Albrook
+  route: albrook_panama_viejo
+  direction: 1
+
+albrook_tocumen:
+  headsign: hacia Tocumen
+  route: albrook_tocumen
+  direction: 0
+  
+tocumen_albrook:
+  headsign: hacia Albrook
+  route: albrook_tocumen
+  direction: 1
+  
+tocumen_tumba_muerto_albrook:
+  headsign: hacia Albrook
+  route: tocumen_tumba_muerto_albrook
+  direction: 0
+
+albrook_tumba_muerto_tocumen:
+  headsign: hacia Tocumen
+  route: tocumen_tumba_muerto_albrook
+  direction: 1
+
+san_pedro_via_espana:
+  headsign: hacia San Pedro
+  route: san_pedro_via_espana
+  direction: 0
+
+via_espana_san_pedro:
+  headsign: hacia Vía España
+  route: san_pedro_via_espana
+  direction: 1
+
+via_brasil_federico_boyd:
+  headsign: Circular
+  route: via_brasil_federico_boyd
+  direction: 0
+  
+paitilla_plaza_edison_via_brasil:
+  headsign: Circular  
+  route: paitilla_plaza_edison_via_brasil
+  direction: 0
+
+  
