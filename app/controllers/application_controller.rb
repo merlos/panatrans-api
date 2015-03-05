@@ -1,14 +1,11 @@
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
+  #protect_from_forgery with: :exception
+  protect_from_forgery with: :null_session
   
   before_filter :default_response_data
-
-
-  # Constants
   
-  # Response CODES and Messages
   
   # Each Code shall have a Message with the same key. 
   Status = {
@@ -16,6 +13,12 @@ class ApplicationController < ActionController::Base
     fail: "fail",
     error: "error"
   }
+  
+  # allow options
+  def options
+    render nothing: true
+  end
+  
   
   protected
 

@@ -5,11 +5,7 @@ module V1
     def index 
       @stop_sequences = StopSequence.all
     end
-    
-    def options
-      render nothing: true
-    end
-    
+      
     def show
     end
     
