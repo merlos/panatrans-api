@@ -31,6 +31,12 @@ module V1
       head :no_content 
     end
      
+    def destroy_by_trip_and_stop
+      @stop_sequence = StopSequence.find_by(stop_id: params[:stop_id], trip_id: params[:trip_id])
+      @stop_sequence.destroy
+      head :no_content
+    end 
+    
     private
     
       # Use callbacks to share common setup or constraints between actions.

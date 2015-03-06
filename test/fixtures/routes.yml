@@ -26,4 +26,8 @@ via_brasil_federico_boyd:
 
 paitilla_plaza_edison_via_brasil:
   name: Paitilla-Plaza Edison-Vía Brasil
+  
+route_with_no_trips:
+  name: Route with no trips
+
 

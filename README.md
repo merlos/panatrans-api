@@ -15,6 +15,8 @@ There are 4 types of resources:
 * __Stop_Sequences__: Is the ordered list of stops for a particular trip. 
 
 
+### ROUTES
+
 #### GET /routes/
 Gets all the routes ordered by name (alphabetical order)
 
@@ -32,7 +34,7 @@ Gets all the routes ordered by name (alphabetical order)
 }
 ``` 
 
-#### Get /routes/with_trips
+#### GET /routes/with_trips
 Gets all the routes ordered alphabetically by name and includes the trips linked to each route.
 
 ```
@@ -53,7 +55,7 @@ Gets all the routes ordered alphabetically by name and includes the trips linked
 			
 ```
 
-### GET /routes/:id
+#### GET /routes/:id
 Returns the information a route identified by `:id`.
 
 ```json
@@ -82,7 +84,7 @@ Returns the information a route identified by `:id`.
 }
 ```  
 
-### POST /route/create
+#### POST /route/create
 Creates a new route
 
 name: STRING
@@ -100,7 +102,7 @@ single_trip: true| false
 
 If the resource is successfully created it returns code = 1 and the trip 
 
-### DELETE /route/:id
+#### DELETE /route/:id
 Deletes the route, its trips and the sequence of stops for each trip
 
 ```json
@@ -111,7 +113,7 @@ Deletes the route, its trips and the sequence of stops for each trip
 
 
 
-### PUT /route/:id
+#### PUT /route/:id
 Updates a route.
 
 ```
@@ -128,6 +130,52 @@ route {
   }
 }
 ``` 
+
+## STOPS
+
+#### GET /stops/
+Gets all stops
+
+#### GET /stops/:id
+
+#### POST /stops/
+
+#### PUT /stops/
+
+#### DELETE /stops/:id
+
+
+## TRIPS
+
+#### GET /trips/
+Gets all trips
+
+#### GET /trips/:id
+
+#### POST /trips/
+
+#### PUT /trips/
+
+#### DELETE /trips/:id
+
+
+## STOP_SEQUENCES
+
+#### GET /stop_sequences/
+Gets all stop_sequences
+
+#### GET /stop_sequences/:id
+
+#### POST /stops_sequences/
+
+#### PUT /stops_sequences/
+
+#### DELETE /stops_seuqneces/:id
+
+#### DELETE /stop_sequences/trip/:trip_id/stop/:stop_id
+Deletes the stop_sequence that links the trip identified by `trip_id` and the stop identified by `stop_id`.
+
+
 
 
 

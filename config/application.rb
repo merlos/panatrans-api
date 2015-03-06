@@ -24,6 +24,7 @@ module PanatransApi
     config.action_dispatch.default_headers = {
       'Access-Control-Allow-Origin' => '*', #<-- instead of * you can set a domain
       'Access-Control-Request-Method' => %w{GET POST PUT OPTIONS DELETE}.join(","),
+      'Access-Control-Allow-Methods' => %w{GET POST PUT OPTIONS DELETE}.join(","),
       'Access-Control-Allow-Headers'=> 'Origin, Authorization, Accept, Content-Type'
         }
     

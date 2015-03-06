@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   namespace :v1 do
     get "/routes/with_trips", to: "routes#with_trips",  defaults: { format:'json' }
     
+    delete "/stop_sequences/trip/:trip_id/stop/:stop_id",  to: "stop_sequences#destroy_by_trip_and_stop",  constraints: {strop_id: /[0-9]+/, trip_id: /[0-9]+/}, defaults: { format:'json' }
+    
     resources :routes, only: [:index, :show, :create, :update, :destroy], defaults: { format: 'json' }
     resources :stops, only: [:index, :show, :create, :update, :destroy], defaults: { format:'json' }
     resources :trips, only: [:index, :show, :create, :update, :destroy], defaults: { format: 'json' }
@@ -9,6 +11,7 @@ Rails.application.routes.draw do
     resources :balance, only: [:show], defaults: {format: 'json'}, constraints: {id: /[0-9]+/}
     
     # Angular sends OPTIONS before a POST
+    match "/stop_sequences/trip/:trip_id/stop/:stop_id/" => "stop_sequences#options", via: :options, constraints: {strop_id: /[0-9]+/, trip_id: /[0-9]+/}, defaults: { format:'json' }
     match "/routes/" => "routes#options", via: :options
     match "/stops/" => "stops#options", via: :options
     match "/trips/" => "trips#options", via: :options

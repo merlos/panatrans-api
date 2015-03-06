@@ -12,9 +12,21 @@ module V1
         assert_routing '/v1/stop_sequences', { format: 'json', controller: "v1/stop_sequences", action: "index" }
     end
     
+    test "should respond to delete by trip and stop ids" do
+      assert_routing( {
+        method: :delete,
+        path: '/v1/stop_sequences/trip/1/stop/2'
+        }, {
+          format:'json',
+          controller: 'v1/stop_sequences',
+          action: "destroy_by_trip_and_stop", 
+          trip_id: "1", 
+          stop_id: "2"
+          }
+      )
+    end
     
     # Functional 
-    
     
     test "should get index" do
       xhr :get, :index
@@ -64,6 +76,17 @@ module V1
       #verify db updated
       @s2 = StopSequence.find(@s.id)
       assert_equal new_sequence, @s2.sequence
+    end
+    
+    
+    test "should delete a stop_sequence with trip and stop ids" do
+      @s = stop_sequences(:alb_mir_1)
+      @count = StopSequence.all.count
+      xhr :delete, :destroy_by_trip_and_stop, {stop_id: @s.stop_id, trip_id: @s.trip_id}
+      assert_raises (ActiveRecord::RecordNotFound) {
+        @s2 = StopSequence.find(@s.id)
+      }
+      assert_equal @count-1, StopSequence.all.count
     end
     
   end
