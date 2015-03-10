@@ -2,7 +2,7 @@ module V1
   class BalanceController < ApplicationController
   
     def show
-    
+         
       card_number = params[:id]
     
       @data = nil

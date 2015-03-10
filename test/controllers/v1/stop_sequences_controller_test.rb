@@ -2,15 +2,18 @@
 module V1
   class StopSequencesControllerTest < ActionController::TestCase
 
+
     # Rails Routes
     
     test "should respond to stop_sequence.show" do
         assert_routing '/v1/stop_sequences/1', { format: 'json', controller: "v1/stop_sequences", action: "show", id: "1" }
     end
     
+    
     test "should respond to stop_sequence.index" do
         assert_routing '/v1/stop_sequences', { format: 'json', controller: "v1/stop_sequences", action: "index" }
     end
+    
     
     test "should respond to delete by trip and stop ids" do
       assert_routing( {
@@ -26,6 +29,7 @@ module V1
       )
     end
     
+    
     # Functional 
     
     test "should get index" do
@@ -33,6 +37,7 @@ module V1
       assert_response :success
       assert_not_nil assigns(:stop_sequences)
     end
+
   
     test "should get a stop_sequence" do
       @s = stop_sequences(:alb_mir_1)
@@ -40,6 +45,7 @@ module V1
       assert_response :success
       assert_not_nil assigns(:stop_sequence)
     end
+
     
     test "should create a stop_sequence" do
       number_of_stop_sequences = StopSequence.all.count
@@ -52,6 +58,7 @@ module V1
       #also check there is another stop_sequence
       assert_equal number_of_stop_sequences + 1, StopSequence.all.count
     end
+   
     
     test "should be able to create a second stop_sequence with same sequence" do
       sequence = 1
@@ -67,15 +74,17 @@ module V1
       assert_response :success
       assert_not_nil assigns(:stop_sequence)
     end
+   
     
     test "should be able to create a stop_sequence with negative value" do
-    @trip = routes(:albrook_miraflores)
-    @stop = stops(:albrook)
-    @sequence = -1
-    xhr :post, :create, {stop_sequence: {sequence: @sequence , stop_id: @stop.id, trip_id: @trip.id}}
-    assert_response :success
-    assert_not_nil assigns(:stop_sequence)
-  end
+      @trip = routes(:albrook_miraflores)
+      @stop = stops(:albrook)
+      @sequence = -1
+      xhr :post, :create, {stop_sequence: {sequence: @sequence , stop_id: @stop.id, trip_id: @trip.id}}
+      assert_response :success
+      assert_not_nil assigns(:stop_sequence)
+    end
+  
   
     test "should update a stop_sequence" do
       @s = stop_sequences(:alb_mir_1)
@@ -111,6 +120,7 @@ module V1
       }
       assert_equal @count-1, StopSequence.all.count
     end
+    
     
   end
 end

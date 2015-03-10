@@ -5,22 +5,22 @@
 
 
 alb_mir_1:
-  sequence: 1
+  sequence: 0
   trip: albrook_miraflores
   stop: albrook
 
 alb_mir_2:
-  sequence: 2
+  sequence: 1
   trip: albrook_miraflores
   stop: diablo
 
 alb_mir_3:
-  sequence: 3
+  sequence: 2
   trip: albrook_miraflores
   stop: ciudad_del_saber
 
 alb_mir_4:
-  sequence: 4
+  sequence: 3
   trip: albrook_miraflores
   stop: miraflores
 
@@ -29,22 +29,22 @@ alb_mir_4:
 
 
 mir_alb_1:
-  sequence: 1
+  sequence: 0
   trip: miraflores_albrook
   stop: miraflores
 
 mir_alb_2:
-  sequence: 2
+  sequence: 1
   trip: miraflores_albrook
   stop: ciudad_del_saber
 
 mir_alb_3:
-  sequence: 3
+  sequence: 2
   trip: miraflores_albrook
   stop: diablo
 
 mir_alb_4:
-  sequence: 4
+  sequence: 3
   trip: miraflores_albrook
   stop: albrook
   
@@ -53,44 +53,44 @@ mir_alb_4:
 
 
 alb_mar_1:
-  sequence: 1
+  sequence: 0
   trip: albrook_maranon
   stop: albrook
 
 alb_mar_2:
-  sequence: 2
+  sequence: 1
   trip: albrook_maranon
   stop: policia_nacional
 
 alb_mar_3:
-  sequence: 3
+  sequence: 2
   trip: albrook_maranon
   stop: mercado_abastos
 
 alb_mar_4:
-  sequence: 4
+  sequence: 3
   trip: albrook_maranon
   stop: maranon
   
 # Sequence of strops for trip Marañon - Albrook
 
 mar_alb_1:
-  sequence: 1
+  sequence: 0
   trip: maranon_albrook
   stop: maranon
 
 mar_alb_2:
-  sequence: 2
+  sequence: 1
   trip: maranon_albrook
   stop: mercado_abastos
 
 mar_alb_3:
-  sequence: 3
+  sequence: 2
   trip: maranon_albrook
   stop: policia_nacional
 
 mar_alb_4:
-  sequence: 4
+  sequence: 3
   trip: maranon_albrook
   stop: albrook
 

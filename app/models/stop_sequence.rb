@@ -1,7 +1,7 @@
 class StopSequence < ActiveRecord::Base
   
   scope :ordered, -> { order('sequence ASC') }
-  acts_as_list column: :sequence, scope: :trip
+  acts_as_list column: :sequence, scope: :trip, top_of_list: 0
   
   
   # Validations
@@ -21,18 +21,17 @@ class StopSequence < ActiveRecord::Base
     @unkown_sequence
   end
   
+  # whenever unknown_sequence is set to true, sequence is set to nil 
+  # sequence = nil means that the sequence within the list is unknown)
   def unknown_sequence=(val)
     @unkown_sequence = (val == true)
   end
   
   # by default when sequence is not set acts_as_list saves the record
-  # at the end of the list (this is done before validation) For those stops with unknown sequence 
+  # at the end of the list (the sequence  is set before_validation) For those stops with unknown sequence 
   # we need to avoid this behaviour.
   def check_if_unknown_sequence
-    if (self.unknown_sequence == true)
-      self.sequence = nil
-    end
-    #puts attributes
+    self.sequence = nil if self.unknown_sequence
   end
   
 

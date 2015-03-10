@@ -53,7 +53,7 @@ class StopSequenceTest < ActiveSupport::TestCase
     @m.save!
     assert @m.in_list? 
     assert @m.first?
-    assert_equal  1, @m.sequence
+    assert_equal  0, @m.sequence
     
     # now we insert another one
     @m2 = StopSequence.new({sequence: -1, stop: @m.stop, trip: @m.trip})
@@ -66,8 +66,8 @@ class StopSequenceTest < ActiveSupport::TestCase
     # m2 should be the first
     # m should be the second 
 
-    assert_equal 1, @m2_db.sequence
-    assert_equal 2, @m_db.sequence
+    assert_equal 0, @m2_db.sequence
+    assert_equal 1, @m_db.sequence
   end
   
   test 'if a 0 is provided then sequence is set as first' do
@@ -75,7 +75,7 @@ class StopSequenceTest < ActiveSupport::TestCase
     @m.save!
     assert @m.in_list? 
     assert @m.first?
-    assert_equal  1, @m.sequence  
+    assert_equal  0, @m.sequence  
   end
  
   test 'stop_sequence without sequence inserts at the end' do
@@ -84,15 +84,15 @@ class StopSequenceTest < ActiveSupport::TestCase
     @m2.save! 
     @m.save!
     
-    #m2.sequence = 2
-    #m.sequence = 1
+    #m2.sequence = 1
+    #m.sequence = 0
     
     # now we add one stop_sequence without sequence
     @m3 = StopSequence.new({stop: @m.stop, trip: @m.trip})
     @m3.save!
     
     @m3_db = StopSequence.find(@m3.id)
-    assert_equal 3, @m3_db.sequence
+    assert_equal 2, @m3_db.sequence
   end
  
   test 'insert sequence without number is last in list' do
@@ -130,6 +130,33 @@ class StopSequenceTest < ActiveSupport::TestCase
     assert_nil @m.sequence
     @m_db = StopSequence.find(@m.id);
     assert_nil @m_db.sequence
+  end
+  
+  test 'setting unknown sequence stop_sequence as first' do
+    @m.unknown_sequence = true
+    @m.save!
+    assert_nil @m.sequence
+    
+    #save as first
+    @m2 =StopSequence.new({stop:@m.stop, trip: @m.trip})
+    @m2.save!
+    assert_equal 0, @m2.sequence
+   
+    #get @m from db and save at position 1
+    @m_db = StopSequence.find(@m.id)
+    assert_nil @m_db.sequence
+            
+    @m_db.insert_at(1)
+    assert_equal 1, @m_db.sequence
+    #@m_db.move_to_top
+    @m_db.update({sequence: 0})
+    assert_equal 0, @m_db.sequence  
+  
+    #puts @m.routes.inspect
+    #ActiveRecord::Base.logger = nil
+ 
+    @m2_db = StopSequence.find(@m2.id)
+    assert_equal 1, @m2_db.sequence
   end
   
   
