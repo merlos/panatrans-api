@@ -11,12 +11,21 @@ Rails.application.routes.draw do
     resources :balance, only: [:show], defaults: {format: 'json'}, constraints: {id: /[0-9]+/}
     
     # Angular sends OPTIONS before a POST
+    # TODO find a better way to define these routes
     match "/stop_sequences/trip/:trip_id/stop/:stop_id/" => "stop_sequences#options", via: :options, constraints: {strop_id: /[0-9]+/, trip_id: /[0-9]+/}, defaults: { format:'json' }
-    match "/routes/" => "routes#options", via: :options
-    match "/stops/" => "stops#options", via: :options
-    match "/trips/" => "trips#options", via: :options
     match "/stop_sequences/" => "stop_sequences#options", via: :options
+    match "/stop_sequences/:id" => "stop_sequences#options", via: :options
     
+    match "/routes/" => "routes#options", via: :options
+    match "/routes/:id" => "routes#options", via: :options
+    
+    match "/stops/" => "stops#options", via: :options
+    match "/stops/:id" => "stops#options", via: :options
+    
+    match "/trips/" => "trips#options", via: :options
+    match "/trips/:id" => "trips#options", via: :options
+    
+        
   end
   
   # The priority is based upon order of creation: first created -> highest priority.

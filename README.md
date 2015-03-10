@@ -45,8 +45,8 @@ Gets all the routes ordered alphabetically by name and includes the trips linked
 		name: STRING, # "Route name"
 		trips: [{
 			id: INT, # trip id
-			headsign: STRING, # "hacia Albrook"
-			direction: INT, # 0=ida, 1= retorno
+			headsign: STRING,   # "hacia Albrook"
+			direction: INT,     # 0=ida, 1= retorno
 		}, ...
 		]
 	}, ...
@@ -62,19 +62,22 @@ Returns the information a route identified by `:id`.
 {
   status: "success"
   data:  {
-  id: INT                  # 1
+  id: INT                  # route id
   name: STRING             # "Albrook - Exclusas de Miraflores" 
   trips: [
     {
-      id: INT              # 2, trip identifier
+      id: INT              # 2, trip id
       headsign: STRING,    # "Hacia Miraflores"
       direction: INT,      # 0 =  ida, 1 = retorno
-      stops: [{
-        sequence: INT    # sequence,
-        id: INT,         # 3 
-        name: STRING,    # "Albrook"
-        lat: LATITUDE,   # 8.9740946
-        lon: LONGITUDE   # -79.5508536
+      stop_sequence: [{
+        id: INT,         # stop_sequence id
+        sequence: INT    # sequence number,
+        stop: {
+        	id: INT,         # stop id
+        	name: STRING,    # "Albrook"
+        	lat: LATITUDE,   # 8.9740946
+        	lon: LONGITUDE   # -79.5508536
+        	}
         },
         ...
       ]
@@ -160,23 +163,57 @@ Gets all trips
 
 
 ## STOP_SEQUENCES
+Stop sequences link stop to trips. 
 
 #### GET /stop_sequences/
 Gets all stop_sequences
 
+
 #### GET /stop_sequences/:id
+Gets the details of a stop_sequence
+
+The first stop in a trip has `stop_sequence.sequence = 1`.
+
+`stop_sequence.sequence = nil`, means that the order of this stop within the trip is unknown. It may happen that the stop was added to the trip, but it wasn't known the position.
+
 
 #### POST /stops_sequences/
+Adds a stop sequence.
 
-#### PUT /stops_sequences/
+POST structure
+
+```
+stop_sequence: {
+	sequence: INT,
+  unkown_sequence: BOOL, # true = ignores `sequence` and sets it to nil
+  trip_id: INT,          # id of the stop to link to the trip
+  stop_id: INT           # id of the trip to link the stop.
+}
+```
+Th response is the same as GET /stop_sequences/:id
+
+#### PUT /stops_sequences/:id
+Updates a stop sequence.
+
+PUT structure, all the values are optional
+```
+stop_sequence: {
+	sequence: INT,
+  unkown_sequence: BOOL, # true = ignores `sequence` and sets it to nil
+  trip_id: INT,          # id of the stop to link to the trip
+  stop_id: INT           # id of the trip to link the stop.
+}
+```
+
+Th response is the same as GET /stop_sequences/:id
+
 
 #### DELETE /stops_seuqneces/:id
+Removes a stop sequence.
+
 
 #### DELETE /stop_sequences/trip/:trip_id/stop/:stop_id
 Deletes the stop_sequence that links the trip identified by `trip_id` and the stop identified by `stop_id`.
-
-
-
 
 
 # Additional information

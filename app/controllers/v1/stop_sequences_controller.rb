@@ -8,10 +8,11 @@ module V1
       
     def show
     end
-    
+        
     def create
       @stop_sequence = StopSequence.new(stop_sequence_params)
-      if @stop_sequence.save
+      
+      if @stop_sequence.save 
         render :show, status: :created, location: v1_stop_sequence_path(@stop_sequence)
       else
        render_json_fail(:unprocessable_entity, @stop_sequence.errors)
@@ -46,7 +47,7 @@ module V1
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def stop_sequence_params
-        params.require(:stop_sequence).permit(:sequence, :stop_id, :trip_id)
+        params.require(:stop_sequence).permit(:sequence, :stop_id, :trip_id, :unknown_sequence)
       end
       
   end

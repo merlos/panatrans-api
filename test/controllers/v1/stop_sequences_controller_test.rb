@@ -68,21 +68,44 @@ module V1
       assert_not_nil assigns(:stop_sequence)
     end
     
+    test "should be able to create a stop_sequence with negative value" do
+    @trip = routes(:albrook_miraflores)
+    @stop = stops(:albrook)
+    @sequence = -1
+    xhr :post, :create, {stop_sequence: {sequence: @sequence , stop_id: @stop.id, trip_id: @trip.id}}
+    assert_response :success
+    assert_not_nil assigns(:stop_sequence)
+  end
+  
     test "should update a stop_sequence" do
       @s = stop_sequences(:alb_mir_1)
       new_sequence = 10
       assert_not_equal new_sequence, @s.sequence 
       xhr :patch, :update, {id: @s.id, stop_sequence: { sequence: new_sequence}}
+      assert_response :success
       #verify db updated
       @s2 = StopSequence.find(@s.id)
       assert_equal new_sequence, @s2.sequence
     end
     
     
+    test "should delete a stop_sequence providing the id" do
+      @s = stop_sequences(:alb_mir_1)
+      @count = StopSequence.all.count
+      xhr :delete, :destroy, {id: @s.id}
+      assert_response :success
+      assert_raises (ActiveRecord::RecordNotFound) {
+        @s2 = StopSequence.find(@s.id)
+      }
+      assert_equal @count-1, StopSequence.all.count
+    end
+  
+    
     test "should delete a stop_sequence with trip and stop ids" do
       @s = stop_sequences(:alb_mir_1)
       @count = StopSequence.all.count
       xhr :delete, :destroy_by_trip_and_stop, {stop_id: @s.stop_id, trip_id: @s.trip_id}
+      assert_response :success
       assert_raises (ActiveRecord::RecordNotFound) {
         @s2 = StopSequence.find(@s.id)
       }
