@@ -4,17 +4,14 @@ module V1
     
     def index 
       @routes = Route.all.order('name ASC')
-    end
-    
+    end   
     
     def with_trips
       @routes = Route.all.includes(:trips).order('name ASC')
-    end
-    
+    end 
     
     def show
-    end
-    
+    end   
     
     def create
       @route = Route.new(route_params)
@@ -23,8 +20,7 @@ module V1
       else
        render_json_fail(:unprocessable_entity, @route.errors)
       end
-    end
-    
+    end    
     
     def update
       if @route.update(route_params)
@@ -33,27 +29,22 @@ module V1
         render_json_fail(:unprocessable_entity, @route.errors)  
       end
     end
-    
-    
+      
     def destroy
       @route.destroy
       head :no_content 
-    end
-     
+    end    
      
     private
-     
-     
+        
       # Use callbacks to share common setup or constraints between actions.
       def set_route
         @route = Route.find(params[:id])
       end
-
-
+      
       # Never trust parameters from the scary internet, only allow the white list through.
       def route_params
         params.require(:route).permit(:name)
-      end
-      
+      end   
   end
 end

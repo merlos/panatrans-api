@@ -5,11 +5,9 @@ module V1
     def index 
       @stop_sequences = StopSequence.all
     end
-     
       
     def show
-    end
-     
+    end 
         
     def create
       @stop_sequence = StopSequence.new(stop_sequence_params)
@@ -20,8 +18,7 @@ module V1
        render_json_fail(:unprocessable_entity, @stop_sequence.errors)
       end
     end
-    
-    
+      
     def update
       # BUG of act_as_list
       # if an element is not in list and added to the list => there is a weird behaviour with the
@@ -42,35 +39,29 @@ module V1
       else
         render_json_fail(:unprocessable_entity, @stop_sequence.errors)  
       end
-    end
-    
+    end 
     
     def destroy
       @stop_sequence.destroy
       head :no_content 
     end
-    
      
     def destroy_by_trip_and_stop
       @stop_sequence = StopSequence.find_by(stop_id: params[:stop_id], trip_id: params[:trip_id])
       @stop_sequence.destroy
       head :no_content
     end 
-   
-    
+     
     private
    
-    
       # Use callbacks to share common setup or constraints between actions.
       def set_stop_sequence
         @stop_sequence = StopSequence.find(params[:id])
       end
 
-
       # Never trust parameters from the scary internet, only allow the white list through.
       def stop_sequence_params
         params.require(:stop_sequence).permit(:sequence, :stop_id, :trip_id, :unknown_sequence)
       end
-      
   end
 end
