@@ -38,7 +38,8 @@ gem 'spring',        group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-# Added on top of default
 
-gem 'nokogiri'
-gem 'acts_as_list'
+
+gem 'nokogiri' # scrapping metrobus
+gem 'acts_as_list' #order stop_sequences
+gem 'haversine' # calculate distance

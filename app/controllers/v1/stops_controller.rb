@@ -2,17 +2,14 @@ module V1
   class StopsController < ApplicationController
     
     before_action :set_stop, only: [:show, :update, :destroy]
-
-    
+  
     def index 
       @stops = Stop.all.order('name ASC')
     end
-
-
+    
     def show
     end
 
-    
     def create
       @stop = Stop.new(stop_params)
       if @stop.save
@@ -21,8 +18,7 @@ module V1
        render_json_fail(:unprocessable_entity, @stop.errors)
       end
     end
-
-    
+ 
     def update
       if @stop.update(stop_params)
         render :show, status: :ok, location: v1_stop_path(@stop) 
@@ -35,6 +31,18 @@ module V1
       @stop.destroy
       head :no_content 
     end
+     
+    def nearby
+      params.permit(:lat, :lon, :radius)
+      #default radius
+      params[:radius] = 2000 if params[:radius].nil? 
+      
+      @lat = params[:lat].to_f
+      @lon = params[:lon].to_f
+      @stops = Stop.nearby(params)
+      @stops = @stops.sort_by { |e| e.distance_to(@lat, @lon)}
+      
+    end
       
     private
       
@@ -43,11 +51,11 @@ module V1
         @stop = Stop.find(params[:id])
       end
 
-
       # Never trust parameters from the scary internet, only allow the white list through.
       def stop_params
         params.require(:stop).permit(:name, :lat, :lon)
       end
+      
       
   end
 end

@@ -93,9 +93,34 @@ class StopTest < ActiveSupport::TestCase
    # routes are returned by name asc, then
    assert_equal r1, stop_routes[0]
    assert_equal r2, stop_routes[1]
-   
-   
   end
   
+  test "nearby finds stops" do
+    params = { lat: "0.00", lon: "0.00", radius: "1000"} # 1000 m ~ 0.1 degrees
+    #there are stops on the db
+    assert_not_equal 0, Stop.all.count
+    #but not on the radius
+    assert_equal 0, Stop.nearby(params).count
+    
+    #add 1 stop within the radius
+    @s = Stop.new({name: "holitas", lat: "0.001", lon: "0.001"});
+    @s.save!
+    assert_equal 1, Stop.nearby(params).count
+    # add another stop within the radius and check it finds
+    @s2 = Stop.new({name: "vecinito", lat: "0.001", lon: "0.001"});
+    @s2.save!
+    # Stop.nearby(params).each do |s|
+    #   puts s.inspect
+    # end
+    assert_equal 2, Stop.nearby(params).count
+  end
+  
+  
+  
+  test "distance_to returns the distance" do
+    @s = Stop.new({name: "cero", lat: 0.0, lon: 0.0})
+    # check that are almost the same (the order of the arguments affects the results)
+    assert_in_delta Haversine.distance(0.0, 0.0, 1.1, 1.1).to_meters, @s.distance_to(1.1, 1.1), 0.000001
+  end
   
 end

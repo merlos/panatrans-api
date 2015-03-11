@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   namespace :v1 do
     get "/routes/with_trips", to: "routes#with_trips",  defaults: { format:'json' }
     
+    get '/stops/nearby/', to: 'stops#nearby', constraints: {lat: /[\d\.]+/, lon: /[\d\.]+/, radius: /[\d]+/}, defaults: { format: 'json' }
+    
     delete "/stop_sequences/trip/:trip_id/stop/:stop_id",  to: "stop_sequences#destroy_by_trip_and_stop",  constraints: {strop_id: /[0-9]+/, trip_id: /[0-9]+/}, defaults: { format:'json' }
     
     resources :routes, only: [:index, :show, :create, :update, :destroy], defaults: { format: 'json' }
@@ -12,11 +14,13 @@ Rails.application.routes.draw do
     resources :stop_sequences, only: [:index, :show, :create, :update, :destroy], defaults: { format: 'json' }
     resources :balance, only: [:show], defaults: {format: 'json'}, constraints: {id: /[0-9]+/}
     
-    # export
+    # Export
     get 'routes/since/:seconds_since_epoc', to: 'routes#since', constraints: {seconds_since_epoc: /[0-9]+/},  defaults: { format: 'json' }
     get 'trips/since/:seconds_since_epoc', to: 'trips#since', constraints: {seconds_since_epoc: /[0-9]+/},  defaults: { format: 'json' }
     get 'stops/since/:seconds_since_epoc', to: 'stops#since', constraints: {seconds_since_epoc: /[0-9]+/},  defaults: { format: 'json' }
     get 'stop_sequences/since/:seconds_since_epoc', to: 'stop_sequences#since', constraints: {seconds_since_epoc: /[0-9]+/},  defaults: { format: 'json' }
+    
+    
     
     # Angular sends OPTIONS before a POST
     # TODO find a better way to define these routes

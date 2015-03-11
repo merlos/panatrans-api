@@ -12,6 +12,9 @@ module V1
         assert_routing '/v1/stops', { format: 'json', controller: "v1/stops", action: "index" }
     end
     
+    test "should respond to stops nearby route" do
+        assert_routing '/v1/stops/nearby', {format: 'json', controller: 'v1/stops', action: 'nearby'}
+    end
     
     # Functional 
     
@@ -61,6 +64,13 @@ module V1
       @s2 = Stop.find(@s.id)
       assert_equal new_name, @s2.name
     end
+    
+#    test "should return nearby stops" do
+#      @s = stops(:albrook)
+#      xhr :get, :nearby, {lat: @s.lat, lon: @s.lon, radius: 1000}
+#      assert_response :success
+#      assert_not_nil_assigns(:stops)
+#    end
     
   end
 end
