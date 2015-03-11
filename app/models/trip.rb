@@ -1,4 +1,5 @@
 class Trip < ActiveRecord::Base
+  include Csvable
   
   # Validations 
   validates :route, presence: true

@@ -1,3 +1,4 @@
+module V1
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -19,6 +20,18 @@ class ApplicationController < ActionController::Base
     render nothing: true
   end
   
+
+  def since
+    time = Time.at(params[:seconds_since_epoc].to_i).to_datetime
+    klass = controller_name.classify.constantize
+    @results = klass.where('updated_at >= :time', time: time)
+      
+    respond_to do |format|
+        format.json{ render :since}
+        format.csv { send_data @results.as_csv, filename: controller_name + '.csv' }
+        #format.xls # { send_data @products.to_csv(col_sep: "\t") }
+    end
+  end
   
   protected
 
@@ -33,4 +46,6 @@ class ApplicationController < ActionController::Base
     }
     render json: json_fail, status: http_status
   end
+    
+end
 end

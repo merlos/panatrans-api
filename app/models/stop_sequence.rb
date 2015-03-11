@@ -1,4 +1,5 @@
 class StopSequence < ActiveRecord::Base
+  include Csvable
   
   scope :ordered, -> { order('sequence ASC') }
   acts_as_list column: :sequence, scope: :trip, top_of_list: 0

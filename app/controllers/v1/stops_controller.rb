@@ -1,5 +1,6 @@
 module V1
   class StopsController < ApplicationController
+    
     before_action :set_stop, only: [:show, :update, :destroy]
 
     
@@ -7,7 +8,7 @@ module V1
       @stops = Stop.all.order('name ASC')
     end
 
-    
+
     def show
     end
 
@@ -30,13 +31,11 @@ module V1
       end
     end
   
-    
     def destroy
       @stop.destroy
       head :no_content 
     end
-  
-     
+      
     private
       
       # Use callbacks to share common setup or constraints between actions.
