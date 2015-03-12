@@ -43,3 +43,4 @@ gem 'spring',        group: :development
 gem 'nokogiri' # scrapping metrobus
 gem 'acts_as_list' #order stop_sequences
 gem 'haversine' # calculate distance
+gem 'git', '~> 1.2.9.1' # git
