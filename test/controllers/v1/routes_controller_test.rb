@@ -74,5 +74,13 @@ module V1
       assert_equal new_name, r2.name
     end
     
+    test "should throw error if try to delete an inexistent resource" do
+      assert_raise (ActiveRecord::RecordNotFound) {
+        xhr :delete, :destroy, {id: 123456789}
+      }
+      #assert_response :not_found # ----- TODO ??
+    end
+    
+    
   end
 end

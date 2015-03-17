@@ -19,16 +19,53 @@ There are 4 types of resources:
 * __Stops__: represent a bus stop. Includes a name and the (latitude, longitude) tuple.
 * __Routes__: Represent bus routes, for example: the route from Albrook to Miraflores.
 * __Trips__: A route generally has one or two trips. For example, the route Albrook - Miraflores has two trips: (1) the trip from Albrook to Miraflores, and (2) the trip from Miraflores to Albrook. Each trip has a set of stops that may be the same or not. There may be some routes that only have a single trip (ie: circular routes, those that start and end at the same location). 
-* __Stop_Sequences__: Is the ordered list of stops for a particular trip. 
+* __Stops_Sequences__: Is the ordered list of stops for a particular trip. 
 
 This schema is an extreme simplification of the [General Transit Feed Specification (GTFS)](https://developers.google.com/transit/gtfs/) defined by Google. The goal would be to create a GTFS feed.
 
+## Common stuff in API Response
+In every API response there is a "status". Possible values are:
+
+1. `success`. Response data will be set in `data`. HTTP response is always 200 (success). Example:
+
+	<!-- curl -X http://test-panatrans.herokuapp.com/v1/routes/ -->
+
+	```json
+	{
+	"status":"success",
+	"data":[
+		{"id":1048002442,"name":"Albrook-Marañón"},
+		{"id":219448156,"name":"Vía Brasil-Federico Boyd"}]
+	}
+	```
+
+2. `fail`, there was a problem performing the operation (ie: incorrect value while creating or updating a resource). The list of problems is passed throught the `errors` object. Example:
+
+	<!-- curl -X POST --data "stops[name]=2" http://test-panatrans.herokuapp.com/v1/stops/-->
+	```json
+	{
+	  "status":"fail",
+	  "errors": {
+		"lat":["can't be blank","is not a number"],
+		"lon":["can't be blank","is not a number"]
+		}
+	}
+	```
+
+
+3. `<number>`, where number is an HTTP error (ie: 404 not found. The error string is passed through `error`. HTTP response status is != 200. 
+
+	```json
+	{
+		"status":"404",
+		"error":"Not Found"
+	}
+	```
 
 ## ROUTES
 
-#### GET /routes/
+### GET /routes/
 Gets all the routes ordered by name (alphabetical order)
-
 
 ```
 {
@@ -43,13 +80,14 @@ Gets all the routes ordered by name (alphabetical order)
 }
 ``` 
 Example:
+http://test-panatrans.herokuapp.com/v1/routes/?prettify=true
 
 ---
 __HINT!__ In any request to the api, if you add to the query string the param `?prettify=true`, the output will be a human readable JSON with indentantion and that kind of stuff. Example: `http://panantransserver.org/v1/routes/?prettify=true` 
 
 ---
 
-#### GET /routes/with_trips
+### GET /routes/with_trips
 Gets all the routes ordered alphabetically by name and includes the trips linked to each route.
 
 ```
@@ -70,8 +108,10 @@ Gets all the routes ordered alphabetically by name and includes the trips linked
 ```
 Example: 
 
-#### GET /routes/:id
-Returns the information a route identified by `:id`.
+[https://test-panatrans.herokuapp.com/v1/routes/?prettify=true](https://test-panatrans.herokuapp.com/v1/routes/?prettify=true)
+
+### GET /routes/:id
+Returns the detail of the route identified by `:id`.
 
 ```
 {
@@ -84,14 +124,14 @@ Returns the information a route identified by `:id`.
       "id" : INT              # 2, trip id
       "headsign" : STRING,    # "Hacia Miraflores"
       "direction" : INT,      # 0 =  ida, 1 = retorno
-      "stop_sequence" : [{
+      "stop_sequences" : [{
         "id" : INT,         # stop_sequence id
-        "sequence" : INT    # sequence number,
+        "sequence" : INT    # first is 0
         "stop" : {
         	"id" : INT,         # stop id
         	"name" : STRING,    # "Albrook"
-        	"lat" : LATITUDE,   # 8.9740946
-        	"lon" : LONGITUDE   # -79.5508536
+        	"lat" : LATITUDE,   # "8.9740946"
+        	"lon" : LONGITUDE   # "-79.5508536"
         	}
         },
         ...
@@ -101,9 +141,17 @@ Returns the information a route identified by `:id`.
   ]
 }
 ``` 
+* `LATITUDE` is a float within the interval (-90, 90).
+* `LONGITUDE` is a float within the interval (-180, 180).
+
+Note: in the response latitude and longitude are enclosed in `""`.
+
 Example: 
 
-#### POST /routes/create
+[http://test-panatrans.herokuapp.com/v1/routes/1048002442?prettify=true](http://test-panatrans.herokuapp.com/v1/routes/1048002442?prettify=true)
+
+
+### POST /routes/create
 Creates a new route
 
 Post data structure:
@@ -115,24 +163,14 @@ Post data structure:
 }
 ```
 
-Response: 
- 
-```
-{
-  "status": "success"
-  "data":{  
-      # (see GET /route/:id)
-  }
-}
-```
+If the request is successful, it returns the route detail of the new created resource (ie: same as GET /routes/:id).
 
-If the resource is successfully created it returns the resource in `data` (the same response as GET /routes/:id). 
+### DELETE /routes/:id
+Deletes the route with the id `:id`.
 
-#### DELETE /routes/:id
-Deletes the route, its trips and the sequence of stops for each trip
+The response is an HTTP code 200 (success) and an empty response body if the resource was sucessfully deleted. 
 
-
-#### PUT /routes/:id
+### PUT /routes/:id
 Updates a route.
 
 PUT data structure:
@@ -142,15 +180,7 @@ PUT data structure:
 }
 ```
 
-Response:
-```
-{
-  "status": "success"
-  "data": {
-  	(same as GET /route/:id)
-  }
-}
-``` 
+If the request is successful, it returns the route detail of the updated resource (ie: same as GET /routes/:id).
 
 ## STOPS
 
@@ -159,56 +189,293 @@ Gets all stops
 
 ```
 {
-  status: success
-  data: {
-  	(same as GET /route/:id)
-  }
+  "status": "success",
+  "data": [
+    {
+      "id": INT,        # 1
+      "name": STRING    # "Albrook",
+      "lat": LATITUDE   #"8.974095",
+      "lon": LONGITUDE  #"-79.550854"
+    },...
+  ]
+ }
+
+
+```
+Example:
+
+[http://test-panatrans.herokuapp.com/v1/stops/?prettify=true](http://test-panatrans.herokuapp.com/v1/stops/?prettify=true)
+
+
+### GET /stops/:id
+Returns the detail of a stop with id `:id`.
+
+```
+{
+  "status": "success",
+  "data": {
+    "id": INT,
+    "name": STRING       # "Albrook",
+    "lat": LATITUDE      # "8.974095",
+    "lon": LONGITUDE     # "-79.550854",
+    "routes": [
+      {
+        "id": INT,
+        "name": STRING   # "Albrook-Marañón",
+        "trips": [
+          {
+            "id": INT,
+            "headsign": STRING # "hacia Marañón",
+            "direction": INT   # 0=> ida/circular, 1=> vuelta,
+            "route_id": INT    # 1048002442
+          },
+          ...
+         ] 
+      },
+      ...
+    ] 
+  } 
 }
-``` 
+```
+Example:
+
+[http://test-panatrans.herokuapp.com/v1/stops/382818451?prettify=true](http://test-panatrans.herokuapp.com/v1/stops/382818451?prettify=true)
+
+### GET /v1/stops/nearby/?lat=LATITUDE&lon=LONGITUDE&radius=METERS
+Gets the stops in the surroundings of the center `(lat, lon)` within the `radius` (in meters). 
+
+```
+{
+  "status": "success",
+  "data": [
+    {
+      "id": INT,       # stop_id
+      "name": STRING   # stop name "Policía Nacional",
+      "lat": LONGITUDE # "8.965629",
+      "lon": LATITUDE  # "-79.549224",
+      "distance": INT  # meters from requested point.
+    },
+   ]
+ }
+```
+The response returns the stops ordered by ascendent distance.
+
+Example: Get stops close to the point (8.9656294,-79.5492239) and within a radius of 1000m (1km):
+
+http://test-panatrans.herokuapp.com/v1/stops/nearby?lat=8.9656294&lon=-79.5492239&radius=1000&prettify=true
 
 
-#### GET /stops/:id
+### POST /stops/
+Creates a new stop
 
-#### POST /stops/
+Request data structure: 
+```
+{
+ "stop" {
+ 	name: STRING,
+ 	lat: LATITUDE,
+ 	lon: LONGITUDE
+ }
+}
+```
 
-#### PUT /stops/
+If the request is successful, it returns the stop detail of the new created stop (GET /stop/:id).
 
-#### DELETE /stops/:id
+
+### PUT /stops/:id
+Updates the stop with the `:id` setting up the values of the request data.
+
+Request data structure: 
+
+```
+{
+ "stop" {
+ 	name: STRING,
+ 	lat: LATITUDE,
+ 	lon: LONGITUDE
+ }
+}
+```
+
+If the request is successful, it returns the stop detail of the updated resource (ie: same response as `GET /stops/:id`).
+
+
+
+### DELETE /stops/:id
+Deletes the stop with the id `:id`.
+
+If the resource was sucessfully deleted, the response is an HTTP code 200 (success) and an empty response body . 
 
 
 ## TRIPS
 
 #### GET /trips/
-Gets all trips
+Gets all trips.
 
-#### GET /trips/:id
+```
+{
+ "status": "success",
+  "data": [
+    {
+      "id": INT,          # trip id
+      "headsign": STRING  # "hacia Albrook",
+      "direction": 1,     # 
+      "route": {          # route this trip belongs to.
+        "id": INT,        # route id
+        "name":           # route name: "Albrook-Panamá Viejo"
+      }
+    },
+	...
+  ]
+}
+```
+
+Example:
+
+[http://test-panatrans.herokuapp.com/v1/trips?prettify=true](http://test-panatrans.herokuapp.com/v1/trips?prettify=true)
+
+
+### GET /trips/:id
+Gets the detail of the trip with id `:id`. The sequence of stops is returned ordered by sequence number. 
+
+A __stop without sequence__ number means that the stop belongs to that trip but the order within the same is unknown. 
+
+```
+{
+  "status": "success",
+  "data": {
+    "id": INT,           # trip id
+    "headsign": STRING   # trip headsign "hacia Marañón",
+    "direction": 0,      # trip direction, 0=>go 1=> return
+    "route": {
+      "id": INT,      # route id
+      "name": STRING, # route name "Albrook-Marañón"
+    },
+    "stop_sequences": [
+      {
+        "id": INT,        # Stops sequence id
+        "sequence": 0,    # sequence Number
+        "stop": {         
+          "id": INT,        # stop id
+          "name": STRING    # "Albrook",
+          "lat": LATITUDE   # "8.9740946",
+          "lon": LONGITUDE  #"-79.5508536"
+        }
+      },
+      ...
+      }
+    ]
+  }
+}
+```
+
+Example:
+[http://test-panatrans.herokuapp.com/v1/trips/1048002442?prettify=true](http://test-panatrans.herokuapp.com/v1/trips/1048002442?prettify=true)
 
 #### POST /trips/
+Creates a new trip.
 
-#### PUT /trips/
+Post data structure:
+```
+{
+  "trip": {
+  	headsign: STRING,  # "hacia Albrook", "Circular", ...
+  	direction: INT, 
+  	route_id: INT, # id of the route the trip belongs to
+}
+```
+
+If the request is successful, it returns the trip detail of the new created resource (`GET /trips/:id`).
+
+
+#### PUT /trip/:id
+Updates an existing trip
+
+Post data structure:
+
+```
+{
+  "trip": {
+  	"headsign": STRING,
+  	"direction": INT 
+  }
+}
+```
+
+If the request is successful, it returns the trip detail of the updated resource (ie: same response as `GET /trips/:id`).
+
 
 #### DELETE /trips/:id
+Deletes the trip with the id `:id`.
+
+The response is an HTTP code 200 (success) and an empty response body if the resource was sucessfully deleted. 
+
 
 
 ## STOP_SEQUENCES
-Stop sequences link stop to trips. 
+Stops sequences link stops to trips. 
 
 #### GET /stop_sequences/
-Gets all stop_sequences
+Gets all stops_sequences
+
+```
+{
+  "status": "success",
+  "data": [
+    {
+      "id": 13110989,
+      "sequence": 3,
+      "stop_id": 382818451,
+      "trip_id": 665778822
+    },...
+  ]
+}
+```
+Example:
+
+http://test-panatrans.herokuapp.com/v1/stop_sequences?prettify=true
 
 
 #### GET /stop_sequences/:id
 Gets the details of a stop_sequence
 
-The first stop in a trip has `stop_sequence.sequence = 1`.
+The first stop in a trip has `sequence = 0`.
 
 `stop_sequence.sequence = nil`, means that the order of this stop within the trip is unknown. It may happen that the stop was added to the trip, but it wasn't known the position.
 
+```
+{
+  "status": "success",
+  "data": {
+    "id": INT,        # stop_sequence id
+    "sequence": INT,  # position in the trip
+    "stop": {
+      "id": INT,         # stop id
+      "name": STRING,    # "Albrook",
+      "lat": LATITUDE,   # "8.974095",
+      "lon": LONGITUDE   # "-79.550854"
+    },
+    "trip": {
+      "id": INT,         # trip_id
+      "headsign": STRING # "hacia Miraflores",
+      "direction": INT,  # 
+      "route": {         
+        "id": INT,       # route id
+        "name":          # "Albrook-Miraflores"
+      }
+    }
+  }
+}
+```
 
-#### POST /stops_sequences/
-Adds a stop sequence.
+Example:
 
-POST structure
+http://test-panatrans.herokuapp.com/v1/stop_sequences/396371388?prettify=true
+
+### POST /stops_sequences/
+Creates a new stop sequence.
+
+POST structure:
 
 ```
 stop_sequence: {
@@ -218,10 +485,11 @@ stop_sequence: {
   stop_id: INT           # id of the trip to link the stop.
 }
 ```
-Th response is the same as GET /stop_sequences/:id
+If the request is successful, it returns the stop sequence detail of the new created resource (i.e: `GET /stop_sequence/:id`).
+
 
 #### PUT /stops_sequences/:id
-Updates a stop sequence.
+Updates a stops sequence.
 
 PUT structure, all the values are optional
 
@@ -234,15 +502,19 @@ stop_sequence: {
 }
 ```
 
-Th response is the same as GET /stop_sequences/:id
+If the request is successful, it returns the stop sequence detail of the updated resource (ie: same response as `GET /stop_sequences/:id`).
 
 
 #### DELETE /stops_sequences/:id
 Removes a stop sequence.
 
+The response is an HTTP code 200 (success) and an empty response body if the resource was sucessfully deleted. 
+
 
 #### DELETE /stop_sequences/trip/:trip_id/stop/:stop_id
 Deletes the stop_sequence that links the trip identified by `trip_id` and the stop identified by `stop_id`.
+
+The response is an HTTP code 200 (success) and an empty response body if the resource was sucessfully deleted. 
 
 
 ## Export Calls
