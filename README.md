@@ -23,13 +23,14 @@ There are 4 types of resources:
 
 This schema is an extreme simplification of the [General Transit Feed Specification (GTFS)](https://developers.google.com/transit/gtfs/) defined by Google. The goal would be to create a GTFS feed.
 
+
 ## ROUTES
 
 #### GET /routes/
 Gets all the routes ordered by name (alphabetical order)
 
 
-```json 
+```
 {
   "status" : "success",
   "data" : [{ 
@@ -43,10 +44,15 @@ Gets all the routes ordered by name (alphabetical order)
 ``` 
 Example:
 
+---
+__HINT!__ In any request to the api, if you add to the query string the param `?prettify=true`, the output will be a human readable JSON with indentantion and that kind of stuff. Example: `http://panantransserver.org/v1/routes/?prettify=true` 
+
+---
+
 #### GET /routes/with_trips
 Gets all the routes ordered alphabetically by name and includes the trips linked to each route.
 
-```json
+```
 {
 	"status" : "success"
 	"data" : [{
@@ -67,7 +73,7 @@ Example:
 #### GET /routes/:id
 Returns the information a route identified by `:id`.
 
-```json
+```
 {
   "status" : "success"
   "data" :  {
@@ -111,7 +117,7 @@ Post data structure:
 
 Response: 
  
-```json
+```
 {
   "status": "success"
   "data":{  
@@ -129,7 +135,7 @@ Deletes the route, its trips and the sequence of stops for each trip
 #### PUT /routes/:id
 Updates a route.
 
-Put data structure:
+PUT data structure:
 ```
 "route" {
 	"name": STRING
@@ -137,10 +143,10 @@ Put data structure:
 ```
 
 Response:
-```json
+```
 {
-  status: success
-  data: {
+  "status": "success"
+  "data": {
   	(same as GET /route/:id)
   }
 }
@@ -150,6 +156,16 @@ Response:
 
 #### GET /stops/
 Gets all stops
+
+```
+{
+  status: success
+  data: {
+  	(same as GET /route/:id)
+  }
+}
+``` 
+
 
 #### GET /stops/:id
 
@@ -208,6 +224,7 @@ Th response is the same as GET /stop_sequences/:id
 Updates a stop sequence.
 
 PUT structure, all the values are optional
+
 ```
 stop_sequence: {
 	sequence: INT,
@@ -228,9 +245,9 @@ Removes a stop sequence.
 Deletes the stop_sequence that links the trip identified by `trip_id` and the stop identified by `stop_id`.
 
 
-## Export
+## Export Calls
 
-There is a set of calls to get a list of the resources that have been created or changed since a particular date.
+There is a set of calls to get the resources that have been created or changed since a particular date.
 
 These calls are useful either to get a full database dump or to keep track of the hanges changes in the server database (incremental upates, monitoring).
 
@@ -259,12 +276,12 @@ GET /v1/stop_sequences/since/0.csv
 ```
 
 
-# Install your own API server
+# Setting up your panatrans API server
 
 The API has been developed in Ruby on Rails. It has been tested using Ruby 2.1.2 and Rails 4.1.6.
 
 
-## How to install: short version
+## Setup: short version
 To create a local version of the server API run these commands: 
 
 ```
@@ -280,7 +297,7 @@ Now you can open your browse at `http://localhost:3000/v1/`, and you'll see the 
 
 You may also want to check the [panatrans-web project](https://github.com/merlos/panatrans-web), that is a web client/editor that makes usage of this API.
 
-## How to install: step by step
+## Setup: step by step
 
 #### 1. Download
 
@@ -290,7 +307,7 @@ To get the source code:
 $ git clone https://github.com/merlos/panatrans-api.git
 ```
 
-Install dependencies
+Then, install dependencies
 
 ```
 $ bundle install
