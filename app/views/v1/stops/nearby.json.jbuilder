@@ -1,3 +1,4 @@
+json.prettify! if @prettify
 json.status @status
 json.data @stops do |stop|
   json.extract! stop, :id, :name, :lat, :lon

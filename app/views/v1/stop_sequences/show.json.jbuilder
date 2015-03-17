@@ -1,3 +1,4 @@
+json.prettify! if @prettify
 json.status @status
 json.data do
   json.extract! @stop_sequence, :id, :sequence
