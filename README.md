@@ -5,7 +5,10 @@ API for the public bus tranportation system of Ciudad de Panamá (Panamá).
 ## About
 Panatrans is a collaborative project to allow the users of the panamenian public transport to create a dataset with the information of the stops and routes available in the City of Panama (which is currently inexistent).
 
-This project is based in the premise that open software and open data are the key of innovation.
+This project is based in the premise that open software and open data are the key of innovation. 
+
+Collaborative user generated content is another key concept of the project, and in that sense, the API provides universal read and write access to content.  
+
 
 Related Projects that may interest you:
 
@@ -15,6 +18,8 @@ Related Projects that may interest you:
 
 # API Specification V1.0 beta
 Specification for developers that plan to make a service or a mobile application based on this API.
+
+This is a JSON RESTful API.
 
 ## Conceptual model 
 
@@ -560,10 +565,13 @@ GET /v1/stop_sequences/since/0.csv
 ```
 
 
-# Setting up your panatrans API server
+# Setting up your own panatrans API server
+
+If you want to set up you own server for development purposes here you have the instructions.
 
 The API has been developed in Ruby on Rails. It has been tested using Ruby 2.1.2 and Rails 4.1.6.
 
+panatrans-api is also [heroku-friendly](http://www.heroku.com), so you can test the project on that environment.
 
 ## Setup: short version
 To create a local version of the server API run these commands: 
@@ -681,6 +689,7 @@ rake dataset:fixtures
 
 ## Changelog
 1. V1.0 beta. March 2015. First version.
+
 
 
 # License
