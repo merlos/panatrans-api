@@ -20,7 +20,7 @@ Specification for developers that plan to make a service or a mobile application
 
 This API relies in a schema that is an extreme simplification of the [General Transit Feed Specification (GTFS)](https://developers.google.com/transit/gtfs/) defined by Google. 
 
-![Conceptual model of a route](https://www.merlos.org/panatrans-api/conceptual_route.png "Conceptual model of a route")
+![Conceptual model of a route](http://www.merlos.org/panatrans-api/conceptual_route.png "Conceptual model of a route")
 
 There are 4 types of resources to represent a route (models, data types, objects or whatever you):
 
