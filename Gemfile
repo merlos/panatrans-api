@@ -48,7 +48,9 @@ gem 'rails_12factor', group: :production
 gem 'pg', group: [:production]
 
 # Required by the API
+gem 'paper_trail', '~> 4.0.0.beta2'
 gem 'nokogiri' # scrapping metrobus
 gem 'acts_as_list' #order stop_sequences
 gem 'haversine' # calculate distance
 gem 'git', '~> 1.2.9.1' # git
+

@@ -59,6 +59,9 @@ GEM
     multi_json (1.10.1)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
+    paper_trail (4.0.0.beta2)
+      activerecord (>= 3.0, < 6.0)
+      activesupport (>= 3.0, < 6.0)
     pg (0.17.1)
     rack (1.5.2)
     rack-test (0.6.3)
@@ -128,6 +131,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   nokogiri
+  paper_trail (~> 4.0.0.beta2)
   pg
   rails (= 4.1.6)
   rails_12factor
