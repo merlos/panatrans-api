@@ -5,7 +5,9 @@ API for the public bus tranportation system of Ciudad de Panamá (Panamá).
 ## About
 Panatrans is a collaborative project to allow the users of the panamenian public transport to create a dataset with the information of the stops and routes available in the City of Panama (which is currently inexistent).
 
-Related Projects:
+This project is based in the premise that open software and open data are the key of innovation.
+
+Related Projects that may interest you:
 
 1. __[panatrans-dataset](https://github.com/merlos/panatrans-dataset)__: dataset to be used with this API.
 2. __[panatrans-web](https://github.com/merlos/panatrans-web)__: A javascript web client and editor that makes usage of this API.
@@ -14,16 +16,26 @@ Related Projects:
 # API Specification V1.0 beta
 Specification for developers that plan to make a service or a mobile application based on this API.
 
-There are 4 types of resources:
+## Conceptual model 
 
-* __Stops__: represent a bus stop. Includes a name and the (latitude, longitude) tuple.
-* __Routes__: Represent bus routes, for example: the route from Albrook to Miraflores.
-* __Trips__: A route generally has one or two trips. For example, the route Albrook - Miraflores has two trips: (1) the trip from Albrook to Miraflores, and (2) the trip from Miraflores to Albrook. Each trip has a set of stops that may be the same or not. There may be some routes that only have a single trip (ie: circular routes, those that start and end at the same location). 
-* __Stops_Sequences__: Is the ordered list of stops for a particular trip. 
+This API relies in a schema that is an extreme simplification of the [General Transit Feed Specification (GTFS)](https://developers.google.com/transit/gtfs/) defined by Google. 
 
-This schema is an extreme simplification of the [General Transit Feed Specification (GTFS)](https://developers.google.com/transit/gtfs/) defined by Google. The goal would be to create a GTFS feed.
+![Conceptual model of a route](https://www.merlos.org/panatrans-api/conceptual_route.png "Conceptual model of a route")
 
-## Common stuff in API Response
+There are 4 types of resources to represent a route (models, data types, objects or whatever you):
+
+* __Stop__: Represents a bus stop. Includes a name and the (latitude, longitude) tuple.
+
+* __Route__: Represents a bus route, for example: the route from Albrook to Miraflores.
+
+* __Trip__: A route generally has one or two trips. For example, the route Albrook - Miraflores has two trips: (1) the trip from Albrook to Miraflores, and (2) the trip from Miraflores to Albrook. Each trip has a set of stops that may be the same or not. There may be some routes that only have a single trip (ie: circular routes or those that start and end at the same location). 
+
+* __Stop_Sequence__: Links a trip with a stop to create an ordered list of stops. In the example, the trip Albrook to Miraflores has 4 stops, and therefore it has 4 `stop_sequences`, each one will link one of the stops with that trip. The first stop is Albrook (sequence = 0), then Diablo (sequence = 1), Ciudad del Saber (sequence = 2) and the last one Miraflores (sequence = 3).
+
+In any call to the API you'll be requesting any of these resources. 
+
+## Common stuff in API Responses
+
 In every API response there is a "status". Possible values are:
 
 1. `success`. Response data will be set in `data`. HTTP response is always 200 (success). Example:
