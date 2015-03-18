@@ -94,10 +94,10 @@ Gets all the routes ordered alphabetically by name and includes the trips linked
 {
 	"status" : "success"
 	"data" : [{
-		"id" : INT,  #route id
-		"name" : STRING, # "Route name"
+		"id" : INT,             #route id
+		"name" : STRING,        # "Route name"
 		"trips" : [{
-			"id": INT, # trip id
+			"id": INT,            # trip id
 			"headsign": STRING,   # "hacia Albrook"
 			"direction": INT,     # 0=ida, 1= retorno
 		   }, ...
@@ -125,8 +125,8 @@ Returns the detail of the route identified by `:id`.
       "headsign" : STRING,    # "Hacia Miraflores"
       "direction" : INT,      # 0 =  ida, 1 = retorno
       "stop_sequences" : [{
-        "id" : INT,         # stop_sequence id
-        "sequence" : INT    # first is 0
+        "id" : INT,           # stop_sequence id
+        "sequence" : INT      # first is 0
         "stop" : {
         	"id" : INT,         # stop id
         	"name" : STRING,    # "Albrook"
@@ -151,7 +151,7 @@ Example:
 [http://test-panatrans.herokuapp.com/v1/routes/1048002442?prettify=true](http://test-panatrans.herokuapp.com/v1/routes/1048002442?prettify=true)
 
 
-### POST /routes/create
+### POST /routes/
 Creates a new route
 
 Post data structure:
@@ -215,13 +215,13 @@ Returns the detail of a stop with id `:id`.
   "status": "success",
   "data": {
     "id": INT,
-    "name": STRING       # "Albrook",
-    "lat": LATITUDE      # "8.974095",
-    "lon": LONGITUDE     # "-79.550854",
+    "name": STRING             # "Albrook",
+    "lat": LATITUDE            # "8.974095",
+    "lon": LONGITUDE           # "-79.550854",
     "routes": [
       {
         "id": INT,
-        "name": STRING   # "Albrook-Marañón",
+        "name": STRING         # "Albrook-Marañón",
         "trips": [
           {
             "id": INT,
@@ -272,9 +272,9 @@ Request data structure:
 ```
 {
  "stop" {
- 	name: STRING,
- 	lat: LATITUDE,
- 	lon: LONGITUDE
+ 	 "name": STRING,
+ 	 "lat": LATITUDE,
+ 	 "lon": LONGITUDE
  }
 }
 ```
@@ -290,9 +290,9 @@ Request data structure:
 ```
 {
  "stop" {
- 	name: STRING,
- 	lat: LATITUDE,
- 	lon: LONGITUDE
+ 	 "name": STRING,
+ 	 "lat": LATITUDE,
+ 	 "lon": LONGITUDE
  }
 }
 ```
