@@ -8,6 +8,7 @@ module V1
     end
     
     def show
+      @with_stop_sequences = %w(1 yes true).include?(params["with_stop_sequences"])
     end
 
     def create

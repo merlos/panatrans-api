@@ -30,6 +30,7 @@ module V1
       xhr :get, :show, {id: @s.id}
       assert_response :success
       assert_not_nil assigns(:stop)
+      assert_not assigns(:with_stop_sequences)
     end
     
     test "should create a stop" do
@@ -65,12 +66,20 @@ module V1
       assert_equal new_name, @s2.name
     end
     
-#    test "should return nearby stops" do
-#      @s = stops(:albrook)
-#      xhr :get, :nearby, {lat: @s.lat, lon: @s.lon, radius: 1000}
-#      assert_response :success
-#      assert_not_nil_assigns(:stops)
-#    end
+    test "should return nearby stops" do
+      @s = stops(:albrook)
+      xhr :get, :nearby, {lat: @s.lat, lon: @s.lon, radius: 1000}
+      assert_response :success
+      assert_not_nil assigns(:stops)
+    end
     
+    test "should support with_stop_sequences option" do
+      @s = stops(:albrook)
+      xhr :get, :show, {id: @s.id, with_stop_sequences: "true"}
+      assert_response :success
+      assert_not_nil assigns(:stop)
+      assert assigns(:with_stop_sequences)
+      
+    end
   end
 end

@@ -224,27 +224,38 @@ Example:
 [http://test-panatrans.herokuapp.com/v1/stops/?prettify=true](http://test-panatrans.herokuapp.com/v1/stops/?prettify=true)
 
 
-### GET /stops/:id
+### GET /stops/:id[?with_stop_sequences=true]
 Returns the detail of a stop with id `:id`.
+
+Adding the option `with_stop_sequences=true` the response will include the stop_sequences of each trip that has this stop.
 
 ```
 {
   "status": "success",
   "data": {
     "id": INT,
-    "name": STRING             # "Albrook",
-    "lat": LATITUDE            # "8.974095",
-    "lon": LONGITUDE           # "-79.550854",
+    "name": STRING,             # "Albrook",
+    "lat": LATITUDE,             # "8.974095",
+    "lon": LONGITUDE,            # "-79.550854",
     "routes": [
       {
         "id": INT,
-        "name": STRING         # "Albrook-Marañón",
+        "name": STRING,          # "Albrook-Marañón",
         "trips": [
           {
             "id": INT,
-            "headsign": STRING # "hacia Marañón",
-            "direction": INT   # 0=> ida/circular, 1=> vuelta,
-            "route_id": INT    # 1048002442
+            "headsign": STRING,  # "hacia Marañón",
+            "direction": INT,    # 0=> ida/circular, 1=> vuelta,
+            "route_id": INT,     # 1048002442
+            
+            "stop_sequences": [{  # STOP SEQUENCES ARE ONLY SENT if with_stop_sequences=true
+              "id": INT,         # stop_sequence id 
+              "sequence": INT,      
+              "stop_id": INT,
+              "trip_id": INT
+              },
+              ...
+            ]
           },
           ...
          ] 
@@ -257,6 +268,12 @@ Returns the detail of a stop with id `:id`.
 Example:
 
 [http://test-panatrans.herokuapp.com/v1/stops/382818451?prettify=true](http://test-panatrans.herokuapp.com/v1/stops/382818451?prettify=true)
+
+[http://test-panatrans.herokuapp.com/v1/stops/382818451?with_stop_sequences=true&prettify=true](http://test-panatrans.herokuapp.com/v1/stops/382818451?with_stop_sequences=true&prettify=true)
+
+
+#### 
+
 
 ### GET /v1/stops/nearby/?lat=LATITUDE&lon=LONGITUDE&radius=METERS
 Gets the stops in the surroundings of the center `(lat, lon)` within the `radius` (in meters). 
@@ -689,7 +706,6 @@ rake dataset:fixtures
 
 ## Changelog
 1. V1.0 beta. March 2015. First version.
-
 
 
 # License
