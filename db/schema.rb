@@ -11,7 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150224163311) do
+ActiveRecord::Schema.define(version: 20150318182601) do
+
+  create_table "espinita_audits", force: true do |t|
+    t.integer  "auditable_id"
+    t.string   "auditable_type"
+    t.integer  "user_id"
+    t.string   "user_type"
+    t.text     "audited_changes"
+    t.string   "comment"
+    t.integer  "version"
+    t.string   "action"
+    t.string   "remote_address"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "espinita_audits", ["auditable_id", "auditable_type"], name: "index_espinita_audits_on_auditable_id_and_auditable_type"
+  add_index "espinita_audits", ["user_id", "user_type"], name: "index_espinita_audits_on_user_id_and_user_type"
 
   create_table "routes", force: true do |t|
     t.string   "name"
@@ -47,5 +64,16 @@ ActiveRecord::Schema.define(version: 20150224163311) do
   end
 
   add_index "trips", ["route_id"], name: "index_trips_on_route_id"
+
+  create_table "versions", force: true do |t|
+    t.string   "item_type",  null: false
+    t.integer  "item_id",    null: false
+    t.string   "event",      null: false
+    t.string   "whodunnit"
+    t.text     "object"
+    t.datetime "created_at"
+  end
+
+  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
 
 end

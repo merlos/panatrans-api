@@ -1,5 +1,6 @@
 class Stop < ActiveRecord::Base
   include Csvable
+  has_paper_trail  
     
   # Validations
   validates :lat, presence: true, numericality: { greater_than: -90.000000, less_than: 90.000000}
@@ -10,6 +11,7 @@ class Stop < ActiveRecord::Base
   has_many :stop_sequences
   has_many :trips, through: :stop_sequences 
   
+  # routes that have this stop in their trips.
   def routes
     Route.joins(trips: :stops).distinct.where(stops: {id: self.id}).order('name ASC')
   end
@@ -38,7 +40,7 @@ class Stop < ActiveRecord::Base
     Stop.where(lat: min_lat..max_lat, lon: min_lon..max_lon) 
   end
   
-  # Distance from stop to point (straight line)
+  # Distance from stop to point (straight line) in meters
   # Example:
   #  @stop = stop.new({name: "name", lat: 0.0, lon: 1.1})
   #  @stop.distance_to(1.1, 2.2)

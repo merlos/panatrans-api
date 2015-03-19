@@ -1,5 +1,6 @@
 class StopSequence < ActiveRecord::Base
   include Csvable
+  has_paper_trail  
   
   scope :ordered, -> { order('sequence ASC') }
   acts_as_list column: :sequence, scope: :trip, top_of_list: 0

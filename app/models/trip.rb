@@ -1,5 +1,6 @@
 class Trip < ActiveRecord::Base
   include Csvable
+  has_paper_trail  
   
   # Validations 
   validates :route, presence: true
