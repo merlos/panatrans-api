@@ -553,9 +553,11 @@ The response is an HTTP code 200 (success) and an empty response body if the res
 
 ## Export Calls
 
-There is a set of calls to get the resources that have been created or changed since a particular date.
+There is a set of calls to get the resources that have been created or updated since a particular date.
 
 These calls are useful either to get a full database dump or to keep track of the hanges changes in the server database (incremental upates, monitoring).
+
+__TODO__: Please note that, right now these calls don't include information about deletes (ie: only returns new items that have been created or updated). This is a caveat that is expected to be solved after mergin the features/auditable branch.
 
 The format is the following: 
 

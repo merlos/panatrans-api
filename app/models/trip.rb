@@ -1,6 +1,7 @@
 class Trip < ActiveRecord::Base
   include Csvable
   
+  
   # Validations 
   validates :route, presence: true
   validates :headsign, presence: true
@@ -9,7 +10,8 @@ class Trip < ActiveRecord::Base
     
   # Associations
   belongs_to :route
-  has_many :stop_sequences 
+  has_many :stop_sequences, -> { order('sequence ASC')} 
+  
   has_many :stops, through: :stop_sequences
 
 

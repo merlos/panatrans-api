@@ -8,7 +8,9 @@ class StopSequenceTest < ActiveSupport::TestCase
   
   def self.fill_model
     t = TripTest.fill_model
+    t.save!
     s = StopTest.fill_model
+    s.save!
     StopSequence.new(
     sequence: 10,
     trip: t,
