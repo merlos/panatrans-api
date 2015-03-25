@@ -3,13 +3,14 @@ module V1
     before_action :set_route, only: [:show, :update, :destroy]
     
     def index 
-      @routes = Route.all.order('name ASC')
-    end   
-    
-    def with_trips
-      @routes = Route.all.includes(:trips).order('name ASC')
-    end 
-    
+      @with_trips = %w(1 yes true).include?(params["with_trips"])
+      if @with_trips
+        @routes = Route.all.includes(:trips).order('name ASC')
+      else
+        @routes = Route.all.order('name ASC')
+      end
+    end
+        
     def show
     end   
     

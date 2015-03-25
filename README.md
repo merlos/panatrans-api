@@ -27,13 +27,13 @@ This API relies in a schema that is an extreme simplification of the [General Tr
 
 ![Conceptual model of a route](http://www.merlos.org/panatrans-api/conceptual_route.png "Conceptual model of a route")
 
-There are 4 types of resources to represent a route (models, data types, objects or whatever you):
+There are 4 types of resources:
 
 * __Stop__: Represents a bus stop. Includes a name and the (latitude, longitude) tuple.
 
 * __Route__: Represents a bus route, for example: the route from Albrook to Miraflores.
 
-* __Trip__: A route generally has one or two trips. For example, the route Albrook - Miraflores has two trips: (1) the trip from Albrook to Miraflores, and (2) the trip from Miraflores to Albrook. Each trip has a set of stops that may be the same or not. There may be some routes that only have a single trip (ie: circular routes or those that start and end at the same location). 
+* __Trip__: A route generally has one or two trips. For example, the route Albrook - Miraflores has two trips: (1) the trip from Albrook to Miraflores, and (2) the trip from Miraflores to Albrook. Each trip has a set of stops. These set of stops may be the same or not for both trips. There may be some routes that only have a single trip, for example, circular routes that start and end at the same location. 
 
 * __Stop_Sequence__: Links a trip with a stop to create an ordered list of stops. In the example, the trip Albrook to Miraflores has 4 stops, and therefore it has 4 `stop_sequences`, each one will link one of the stops with that trip. The first stop is Albrook (sequence = 0), then Diablo (sequence = 1), Ciudad del Saber (sequence = 2) and the last one Miraflores (sequence = 3).
 
@@ -81,39 +81,16 @@ In every API response there is a "status". Possible values are:
 
 ## ROUTES
 
-### GET /routes/
+### GET /routes/[?with_trips=true]
 Gets all the routes ordered by name (alphabetical order)
-
-```
-{
-  "status" : "success",
-  "data" : [{ 
-    "id" : INT,       # 1
-    "name" : STRING,  # "Albrook - Exclusas de Miraflores"
-    },
-    ...
-    ]
-  }
-}
-``` 
-Example:
-http://test-panatrans.herokuapp.com/v1/routes/?prettify=true
-
----
-__HINT!__ In any request to the api, if you add to the query string the param `?prettify=true`, the output will be a human readable JSON with indentantion and that kind of stuff. Example: `http://panantransserver.org/v1/routes/?prettify=true` 
-
----
-
-### GET /routes/with_trips
-Gets all the routes ordered alphabetically by name and includes the trips linked to each route.
-
 ```
 {
 	"status" : "success"
 	"data" : [{
-		"id" : INT,             #route id
-		"name" : STRING,        # "Route name"
-		"trips" : [{
+		"id" : INT,              #route id
+		"name" : STRING,         # "Route name"
+		               
+		"trips" : [{  # <-- Only sent if with_trips=true
 			"id": INT,            # trip id
 			"headsign": STRING,   # "hacia Albrook"
 			"direction": INT,     # 0=ida, 1= retorno
@@ -123,6 +100,20 @@ Gets all the routes ordered alphabetically by name and includes the trips linked
    }
 }			
 ```
+Example:
+http://test-panatrans.herokuapp.com/v1/routes/?prettify=true
+
+Including trips:
+http://test-panatrans.herokuapp.com/v1/routes/?with_trips=true&prettify=true
+
+---
+__HINT!__ In any request to the api, if you add to the query string the param `?prettify=true`, the output will be a human readable JSON with indentantion and that kind of stuff. Example: `http://panantransserver.org/v1/routes/?prettify=true` 
+
+---
+
+### GET /routes/with_trips
+Gets all the routes ordered alphabetically by name and includes the trips linked to each route.
+
 Example: 
 
 [https://test-panatrans.herokuapp.com/v1/routes/?prettify=true](https://test-panatrans.herokuapp.com/v1/routes/?prettify=true)
