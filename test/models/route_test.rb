@@ -7,7 +7,8 @@ class RouteTest < ActiveSupport::TestCase
   
   def self.fill_model
     Route.new(
-      name: "route" + random
+      name: "route" + random,
+      url: "http://www.site.com/"
     )
   end
   
@@ -31,5 +32,20 @@ class RouteTest < ActiveSupport::TestCase
     assert @m2.invalid?
   end
   
+  test 'empty route url' do
+    @m.url = nil
+    assert @m.valid?
+  end
+  
+  test 'route url invalid' do
+    @m.url ="8192741982734"
+    assert @m.invalid?
+  end
+  
+  
+  test 'route url https' do
+    @m.url = "https://www.panatrans.org"
+    assert @m.valid?
+  end
   
 end

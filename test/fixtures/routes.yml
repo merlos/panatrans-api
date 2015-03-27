@@ -2,15 +2,19 @@
 
 albrook_miraflores:
   name: Albrook-Miraflores
+  url: http://www.mibus.com.pa/albrook-esclusas-de-miraflores/
 
 albrook_maranon:
   name: Albrook-Marañón
+  url: http://www.mibus.com.pa/estacion-5-de-mayo/
+  
 
 
 # without stop sequences
 
 albrook_panama_viejo:
   name: Albrook-Panamá Viejo
+  url: http://www.mibus.com.pa/rutas/
   
 albrook_tocumen:
   name: Albrook-Tocumen

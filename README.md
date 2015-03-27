@@ -89,6 +89,7 @@ Gets all the routes ordered by name (alphabetical order)
 	"data" : [{
 		"id" : INT,              #route id
 		"name" : STRING,         # "Route name"
+    "url" : URL,             # url of the route @ mibus.com.pa. May be null
 		               
 		"trips" : [{  # <-- Only sent if with_trips=true
 			"id": INT,            # trip id
@@ -100,6 +101,9 @@ Gets all the routes ordered by name (alphabetical order)
    }
 }			
 ```
+
+`url`is a web address that should have more information about the route. Typically located at mibus.com.pa. Its value may be null.
+
 Example:
 http://test-panatrans.herokuapp.com/v1/routes/?prettify=true
 
@@ -127,6 +131,7 @@ Returns the detail of the route identified by `:id`.
   "data" :  {
   "id" : INT                  # route id
   "name" : STRING             # "Albrook - Exclusas de Miraflores" 
+  "url" : URL,                # URL of the route at mibus.com.pa. May be null
   "trips" : [
     {
       "id" : INT              # 2, trip id
@@ -167,9 +172,12 @@ Post data structure:
 ```
 {
  "route": {
- 	"name":  STRING;
+ 	"name":  STRING,
+  "url": URL       # URL: http://www.mibus.com.pa/rutas/
 }
 ```
+
+`url` is optional.
 
 If the request is successful, it returns the route detail of the new created resource (ie: same as GET /routes/:id).
 
@@ -184,11 +192,12 @@ Updates a route.
 PUT data structure:
 ```
 "route" {
-	"name": STRING
+	"name": STRING,
+  "url": URL
 }
 ```
 
-If the request is successful, it returns the route detail of the updated resource (ie: same as GET /routes/:id).
+If the request is successful, it returns the route detail of the updated resource (ie: same as GET /routes/:id). 
 
 ## STOPS
 
@@ -232,6 +241,7 @@ Adding the option `with_stop_sequences=true` the response will include the stop_
       {
         "id": INT,
         "name": STRING,          # "Albrook-Marañón",
+        "url": URL,              # http://www.mibus.com.pa/rutas
         "trips": [
           {
             "id": INT,
@@ -303,6 +313,7 @@ Request data structure:
  }
 }
 ```
+All fields are mandatory.
 
 If the request is successful, it returns the stop detail of the new created stop (GET /stop/:id).
 
@@ -344,16 +355,19 @@ Gets all trips.
     {
       "id": INT,          # trip id
       "headsign": STRING  # "hacia Albrook",
-      "direction": 1,     # 
+      "direction": INT,   # 0 => go, 1 => return trip
       "route": {          # route this trip belongs to.
         "id": INT,        # route id
-        "name":           # route name: "Albrook-Panamá Viejo"
+        "name": STRING,   # route name: "Albrook-Panamá Viejo"
+        "url": URL,       # route url: http://www.mibus.com.pa/rutas/
       }
     },
 	...
   ]
 }
 ```
+
+`direction` is an integer that indicates if the trip is to go or return. 0 means go and 1 means return. For example, in the route "Albrook - Miraflores", the first trip from Albrook to Miraflores has `direction = 0`. The return trip, from Miraflores to Albrook, has `direction = 1`.
 
 Example:
 
@@ -375,6 +389,7 @@ A __stop without sequence__ number means that the stop belongs to that trip but 
     "route": {
       "id": INT,      # route id
       "name": STRING, # route name "Albrook-Marañón"
+      "url": URL,
     },
     "stop_sequences": [
       {
@@ -405,10 +420,11 @@ Post data structure:
 {
   "trip": {
   	headsign: STRING,  # "hacia Albrook", "Circular", ...
-  	direction: INT, 
+  	direction: INT,  # Possible values: 0 => go, 1 => return
   	route_id: INT, # id of the route the trip belongs to
 }
 ```
+All fields are mandatory.
 
 If the request is successful, it returns the trip detail of the new created resource (`GET /trips/:id`).
 
@@ -422,7 +438,7 @@ Post data structure:
 {
   "trip": {
   	"headsign": STRING,
-  	"direction": INT 
+  	"direction": INT,  # Possible values: 0 => go, 1 => return 
   }
 }
 ```
@@ -486,7 +502,8 @@ The first stop in a trip has `sequence = 0`.
       "direction": INT,  # 
       "route": {         
         "id": INT,       # route id
-        "name":          # "Albrook-Miraflores"
+        "name": STRING,  # "Albrook-Miraflores"
+        "url": URL       # http://www.mibus.com.pa/rutas/
       }
     }
   }
