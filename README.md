@@ -505,18 +505,22 @@ POST structure:
 ```
 stop_sequence: {
 	sequence: INT,
-  unkown_sequence: BOOL, # true = ignores `sequence` and sets it to nil
+  unknown_sequence: BOOL, # true = ignores `sequence` and sets it to nil
   trip_id: INT,          # id of the stop to link to the trip
   stop_id: INT           # id of the trip to link the stop.
 }
 ```
 If the request is successful, it returns the stop sequence detail of the new created resource (i.e: `GET /stop_sequence/:id`).
 
+If `sequence` is not set and `unknown_sequence` is `false` or not set, then the server assigns this stop sequence the last position in trip.
+
+If `sequence`is set to 0 and `unknown_sequence`is `false` or not set, then the server assigns this stop sequence the first position in trip.
+
 
 #### PUT /stops_sequences/:id
 Updates a stops sequence.
 
-PUT structure, all the values are optional
+PUT structure, all the values are optional.
 
 ```
 stop_sequence: {
@@ -529,6 +533,7 @@ stop_sequence: {
 
 If the request is successful, it returns the stop sequence detail of the updated resource (ie: same response as `GET /stop_sequences/:id`).
 
+See `POST /stop_sequences/` to know more about the usage of `sequence` and `unknown_sequence`. 
 
 #### DELETE /stops_sequences/:id
 Removes a stop sequence.
