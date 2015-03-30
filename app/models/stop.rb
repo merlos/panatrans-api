@@ -38,6 +38,29 @@ class Stop < ActiveRecord::Base
     Stop.where(lat: min_lat..max_lat, lon: min_lon..max_lon) 
   end
   
+  
+  def self.to_kml 
+    kml = KMLFile.new
+    folder = KML::Folder.new(:name => 'Panatrans')
+    all.each do |stop|
+      folder.features << KML::Placemark.new(
+          :name => stop.name,
+        :geometry => KML::Point.new(:coordinates => {:lat => stop.lat, :lng => stop.lon})
+      )
+    end
+    kml.objects << folder
+    kml.render    
+  end
+  
+  def self.to_gpx
+    require 'GPX'
+    gpx = GPX::GPXFile.new
+    all.each do |stop|
+      gpx.waypoints << GPX::Waypoint.new({name: stop.name, lat: stop.lat, lon: stop.lon, time: stop.updated_at})
+    end 
+    gpx.to_s
+  end
+  
   # Distance from stop to point (straight line)
   # Example:
   #  @stop = stop.new({name: "name", lat: 0.0, lon: 1.1})
