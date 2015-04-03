@@ -16,6 +16,15 @@ module V1
         assert_routing '/v1/stops/nearby', {format: 'json', controller: 'v1/stops', action: 'nearby'}
     end
     
+    test "should get stops in gpx format" do
+        assert_routing '/v1/stops.gpx', { format: 'gpx', controller: "v1/stops", action: "index"}
+    end
+  
+    test "should get stops in kml format" do
+        assert_routing '/v1/stops.kml', { format: 'kml', controller: "v1/stops", action: "index"}
+    end
+  
+    
     # Functional 
     
     
@@ -79,7 +88,22 @@ module V1
       assert_response :success
       assert_not_nil assigns(:stop)
       assert assigns(:with_stop_sequences)
-      
     end
+    
+    
+    test "get all stops in gpx format returns the correct content type" do
+      get :index, {format: 'gpx'}
+      assert_response :success
+      # check content type
+      assert_equal :gpx, Mime::Type.lookup(@response.content_type).to_sym
+    end
+    
+    test "get all stops in kml format returns the correct content type" do
+      get :index, {format: 'kml'}
+      assert_response :success
+      # check content type
+      assert_equal :kml, Mime::Type.lookup(@response.content_type).to_sym
+    end
+    
   end
 end
