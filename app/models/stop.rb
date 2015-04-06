@@ -55,9 +55,7 @@ class Stop < ActiveRecord::Base
   # export to gpx
   def self.to_gpx
     require 'GPX'
-    gpx = GPX::GPXFile.new(name: 'Panatrans')
-    gpx.attributes.creator = "Panatrans.org "
-    
+    gpx = GPX::GPXFile.new(name: 'Panatrans')  
     all.each do |stop|
       gpx.waypoints << GPX::Waypoint.new({name: stop.name, lat: stop.lat, lon: stop.lon, time: stop.updated_at})
     end     
