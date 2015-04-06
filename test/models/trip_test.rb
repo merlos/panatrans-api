@@ -86,4 +86,29 @@ class TripTest < ActiveSupport::TestCase
     
   end
   
+  
+  test 'save multiple trips in a single create' do 
+    trips = [
+      { headsign: "one", direction: 0, route_id: @m.route.id},
+      { headsign: "two", direction: 1, route_id: @m.route.id}
+    ]
+    t = Trip.create(trips)
+    t.each do |trip|
+      assert trip.valid?
+    end
+  end
+  
+  
+  test 'save multiple trips in a single create but with errors' do 
+    trips = [
+      { headsign: "one", direction: 0, route_id: @m.route.id},
+      { headsign: "two", direction: 1} # no route
+    ]
+    t = Trip.create(trips)
+    assert t[0].valid?
+    assert t[1].invalid?
+    
+  end
+  
+  
 end

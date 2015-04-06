@@ -48,4 +48,35 @@ class RouteTest < ActiveSupport::TestCase
     assert @m.valid?
   end
   
+  test "trips are created when saving the route" do
+    @m.save!
+    assert_equal 0, @m.trips.count
+    t0 = TripTest.fill_model
+    t1 = TripTest.fill_model
+    t0.route = @m
+    t1.route = @m
+    @m.trips = [t0, t1]
+    @m.save!
+    
+    @m2 = Route.find(@m.id)
+    assert 2, @m2.trips.count 
+  end
+   
+  test "trips with errors cannot be added to a route" do
+    @m.save!
+    assert_equal 0, @m.trips.count
+    t0 = TripTest.fill_model
+    t1 = TripTest.fill_model
+    t0.route = @m
+    t1.route = @m
+    t1.direction = -200 # will throw error
+    
+    assert_raises(ActiveRecord::RecordNotSaved) {
+      @m.trips = [t0, t1]      
+    }
+    @m2 = Route.find(@m.id)
+    assert 0, @m2.trips.count  
+  end
+
+  
 end
