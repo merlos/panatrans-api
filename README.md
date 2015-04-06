@@ -596,6 +596,19 @@ GET /v1/trips/since/0.csv
 GET /v1/stop_sequences/since/0.csv
 ```
 
+## Exporting stops to KML and GPX
+The API also supports exporting the stops to [Google Earth/Google Maps KML](http://en.wikipedia.org/wiki/Keyhole_Markup_Language) and [GPS Exchange Format (GPX)](http://en.wikipedia.org/wiki/GPS_Exchange_Format). These are the calls:
+
+```
+GET /v1/stops.kml
+GET /v1/stops.gpx
+```
+
+Example:
+
+* http://test-panatrans.herokuapp.com/stops.kml
+* http://test-panatrans.herokuapp.com/stops.gpx
+
 
 # Setting up your own panatrans API server
 
