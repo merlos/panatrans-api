@@ -5,9 +5,15 @@ module V1
   
     def index 
       @stops = Stop.all.order('name ASC')
+      respond_to do |format|
+        format.json {render :index}
+        format.kml { send_data @stops.to_kml, filename: controller_name + '.kml' }
+        format.gpx { send_data @stops.to_gpx, filename: controller_name + '.gpx' }
+      end
     end
     
     def show
+      @with_stop_sequences = %w(1 yes true).include?(params["with_stop_sequences"])
     end
 
     def create

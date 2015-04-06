@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20150318182601) do
 
   create_table "routes", force: true do |t|
     t.string   "name"
+    t.string   "url"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

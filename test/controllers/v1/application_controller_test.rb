@@ -32,7 +32,7 @@ module V1
     # routes
     test "since route is not valid for any resource, only models" do
       assert_raise(ActionController::UrlGenerationError) {
-        get '/v1/balance/since'
+        get '/v1/balance/since/0'
       }  
       assert_routing '/v1/routes/since/0', { format: 'json', controller: "v1/routes", action: "since", seconds_since_epoc: "0"}
       assert_routing '/v1/stops/since/0', { format: 'json', controller: "v1/stops", action: "since", seconds_since_epoc: "0" }

@@ -50,6 +50,9 @@ module V1
       # prettify param makes the json output more readable for humans. 
       # By default it's false.
       @prettify = %w(1 yes true).include?(params["prettify"])
+      
+      # To test UI loading we can introduce in the query string with_delay (but not in production)
+      sleep 5 if (%w(1 yes true).include?(params["with_delay"]) && !Rails.env.production?)
     end
   
     def render_json_fail(http_status, error_hash)

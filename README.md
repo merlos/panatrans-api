@@ -5,7 +5,10 @@ API for the public bus tranportation system of Ciudad de Panamá (Panamá).
 ## About
 Panatrans is a collaborative project to allow the users of the panamenian public transport to create a dataset with the information of the stops and routes available in the City of Panama (which is currently inexistent).
 
-This project is based in the premise that open software and open data are the key of innovation.
+This project is based in the premise that open software and open data are the key of innovation. 
+
+Collaborative user generated content is another key concept of the project, and in that sense, the API provides universal read and write access to content.  
+
 
 Related Projects that may interest you:
 
@@ -16,19 +19,21 @@ Related Projects that may interest you:
 # API Specification V1.0 beta
 Specification for developers that plan to make a service or a mobile application based on this API.
 
+This is a JSON RESTful API.
+
 ## Conceptual model 
 
 This API relies in a schema that is an extreme simplification of the [General Transit Feed Specification (GTFS)](https://developers.google.com/transit/gtfs/) defined by Google. 
 
 ![Conceptual model of a route](http://www.merlos.org/panatrans-api/conceptual_route.png "Conceptual model of a route")
 
-There are 4 types of resources to represent a route (models, data types, objects or whatever you):
+There are 4 types of resources:
 
 * __Stop__: Represents a bus stop. Includes a name and the (latitude, longitude) tuple.
 
 * __Route__: Represents a bus route, for example: the route from Albrook to Miraflores.
 
-* __Trip__: A route generally has one or two trips. For example, the route Albrook - Miraflores has two trips: (1) the trip from Albrook to Miraflores, and (2) the trip from Miraflores to Albrook. Each trip has a set of stops that may be the same or not. There may be some routes that only have a single trip (ie: circular routes or those that start and end at the same location). 
+* __Trip__: A route generally has one or two trips. For example, the route Albrook - Miraflores has two trips: (1) the trip from Albrook to Miraflores, and (2) the trip from Miraflores to Albrook. Each trip has a set of stops. These set of stops may be the same or not for both trips. There may be some routes that only have a single trip, for example, circular routes that start and end at the same location. 
 
 * __Stop_Sequence__: Links a trip with a stop to create an ordered list of stops. In the example, the trip Albrook to Miraflores has 4 stops, and therefore it has 4 `stop_sequences`, each one will link one of the stops with that trip. The first stop is Albrook (sequence = 0), then Diablo (sequence = 1), Ciudad del Saber (sequence = 2) and the last one Miraflores (sequence = 3).
 
@@ -76,39 +81,17 @@ In every API response there is a "status". Possible values are:
 
 ## ROUTES
 
-### GET /routes/
+### GET /routes/[?with_trips=true]
 Gets all the routes ordered by name (alphabetical order)
-
-```
-{
-  "status" : "success",
-  "data" : [{ 
-    "id" : INT,       # 1
-    "name" : STRING,  # "Albrook - Exclusas de Miraflores"
-    },
-    ...
-    ]
-  }
-}
-``` 
-Example:
-http://test-panatrans.herokuapp.com/v1/routes/?prettify=true
-
----
-__HINT!__ In any request to the api, if you add to the query string the param `?prettify=true`, the output will be a human readable JSON with indentantion and that kind of stuff. Example: `http://panantransserver.org/v1/routes/?prettify=true` 
-
----
-
-### GET /routes/with_trips
-Gets all the routes ordered alphabetically by name and includes the trips linked to each route.
-
 ```
 {
 	"status" : "success"
 	"data" : [{
-		"id" : INT,             #route id
-		"name" : STRING,        # "Route name"
-		"trips" : [{
+		"id" : INT,              #route id
+		"name" : STRING,         # "Route name"
+    "url" : URL,             # url of the route @ mibus.com.pa. May be null
+		               
+		"trips" : [{  # <-- Only sent if with_trips=true
 			"id": INT,            # trip id
 			"headsign": STRING,   # "hacia Albrook"
 			"direction": INT,     # 0=ida, 1= retorno
@@ -118,6 +101,23 @@ Gets all the routes ordered alphabetically by name and includes the trips linked
    }
 }			
 ```
+
+`url`is a web address that should have more information about the route. Typically located at mibus.com.pa. Its value may be null.
+
+Example:
+http://test-panatrans.herokuapp.com/v1/routes/?prettify=true
+
+Including trips:
+http://test-panatrans.herokuapp.com/v1/routes/?with_trips=true&prettify=true
+
+---
+__HINT!__ In any request to the api, if you add to the query string the param `?prettify=true`, the output will be a human readable JSON with indentantion and that kind of stuff. Example: `http://panantransserver.org/v1/routes/?prettify=true` 
+
+---
+
+### GET /routes/with_trips
+Gets all the routes ordered alphabetically by name and includes the trips linked to each route.
+
 Example: 
 
 [https://test-panatrans.herokuapp.com/v1/routes/?prettify=true](https://test-panatrans.herokuapp.com/v1/routes/?prettify=true)
@@ -131,6 +131,7 @@ Returns the detail of the route identified by `:id`.
   "data" :  {
   "id" : INT                  # route id
   "name" : STRING             # "Albrook - Exclusas de Miraflores" 
+  "url" : URL,                # URL of the route at mibus.com.pa. May be null
   "trips" : [
     {
       "id" : INT              # 2, trip id
@@ -171,9 +172,12 @@ Post data structure:
 ```
 {
  "route": {
- 	"name":  STRING;
+ 	"name":  STRING,
+  "url": URL       # URL: http://www.mibus.com.pa/rutas/
 }
 ```
+
+`url` is optional.
 
 If the request is successful, it returns the route detail of the new created resource (ie: same as GET /routes/:id).
 
@@ -188,11 +192,12 @@ Updates a route.
 PUT data structure:
 ```
 "route" {
-	"name": STRING
+	"name": STRING,
+  "url": URL
 }
 ```
 
-If the request is successful, it returns the route detail of the updated resource (ie: same as GET /routes/:id).
+If the request is successful, it returns the route detail of the updated resource (ie: same as GET /routes/:id). 
 
 ## STOPS
 
@@ -219,27 +224,39 @@ Example:
 [http://test-panatrans.herokuapp.com/v1/stops/?prettify=true](http://test-panatrans.herokuapp.com/v1/stops/?prettify=true)
 
 
-### GET /stops/:id
+### GET /stops/:id[?with_stop_sequences=true]
 Returns the detail of a stop with id `:id`.
+
+Adding the option `with_stop_sequences=true` the response will include the stop_sequences of each trip that has this stop.
 
 ```
 {
   "status": "success",
   "data": {
     "id": INT,
-    "name": STRING             # "Albrook",
-    "lat": LATITUDE            # "8.974095",
-    "lon": LONGITUDE           # "-79.550854",
+    "name": STRING,             # "Albrook",
+    "lat": LATITUDE,             # "8.974095",
+    "lon": LONGITUDE,            # "-79.550854",
     "routes": [
       {
         "id": INT,
-        "name": STRING         # "Albrook-Marañón",
+        "name": STRING,          # "Albrook-Marañón",
+        "url": URL,              # http://www.mibus.com.pa/rutas
         "trips": [
           {
             "id": INT,
-            "headsign": STRING # "hacia Marañón",
-            "direction": INT   # 0=> ida/circular, 1=> vuelta,
-            "route_id": INT    # 1048002442
+            "headsign": STRING,  # "hacia Marañón",
+            "direction": INT,    # 0=> ida/circular, 1=> vuelta,
+            "route_id": INT,     # 1048002442
+            
+            "stop_sequences": [{  # STOP SEQUENCES ARE ONLY SENT if with_stop_sequences=true
+              "id": INT,         # stop_sequence id 
+              "sequence": INT,      
+              "stop_id": INT,
+              "trip_id": INT
+              },
+              ...
+            ]
           },
           ...
          ] 
@@ -252,6 +269,12 @@ Returns the detail of a stop with id `:id`.
 Example:
 
 [http://test-panatrans.herokuapp.com/v1/stops/382818451?prettify=true](http://test-panatrans.herokuapp.com/v1/stops/382818451?prettify=true)
+
+[http://test-panatrans.herokuapp.com/v1/stops/382818451?with_stop_sequences=true&prettify=true](http://test-panatrans.herokuapp.com/v1/stops/382818451?with_stop_sequences=true&prettify=true)
+
+
+#### 
+
 
 ### GET /v1/stops/nearby/?lat=LATITUDE&lon=LONGITUDE&radius=METERS
 Gets the stops in the surroundings of the center `(lat, lon)` within the `radius` (in meters). 
@@ -290,6 +313,7 @@ Request data structure:
  }
 }
 ```
+All fields are mandatory.
 
 If the request is successful, it returns the stop detail of the new created stop (GET /stop/:id).
 
@@ -331,16 +355,19 @@ Gets all trips.
     {
       "id": INT,          # trip id
       "headsign": STRING  # "hacia Albrook",
-      "direction": 1,     # 
+      "direction": INT,   # 0 => go, 1 => return trip
       "route": {          # route this trip belongs to.
         "id": INT,        # route id
-        "name":           # route name: "Albrook-Panamá Viejo"
+        "name": STRING,   # route name: "Albrook-Panamá Viejo"
+        "url": URL,       # route url: http://www.mibus.com.pa/rutas/
       }
     },
 	...
   ]
 }
 ```
+
+`direction` is an integer that indicates if the trip is to go or return. 0 means go and 1 means return. For example, in the route "Albrook - Miraflores", the first trip from Albrook to Miraflores has `direction = 0`. The return trip, from Miraflores to Albrook, has `direction = 1`.
 
 Example:
 
@@ -362,6 +389,7 @@ A __stop without sequence__ number means that the stop belongs to that trip but 
     "route": {
       "id": INT,      # route id
       "name": STRING, # route name "Albrook-Marañón"
+      "url": URL,
     },
     "stop_sequences": [
       {
@@ -392,10 +420,11 @@ Post data structure:
 {
   "trip": {
   	headsign: STRING,  # "hacia Albrook", "Circular", ...
-  	direction: INT, 
+  	direction: INT,  # Possible values: 0 => go, 1 => return
   	route_id: INT, # id of the route the trip belongs to
 }
 ```
+All fields are mandatory.
 
 If the request is successful, it returns the trip detail of the new created resource (`GET /trips/:id`).
 
@@ -409,7 +438,7 @@ Post data structure:
 {
   "trip": {
   	"headsign": STRING,
-  	"direction": INT 
+  	"direction": INT,  # Possible values: 0 => go, 1 => return 
   }
 }
 ```
@@ -473,7 +502,8 @@ The first stop in a trip has `sequence = 0`.
       "direction": INT,  # 
       "route": {         
         "id": INT,       # route id
-        "name":          # "Albrook-Miraflores"
+        "name": STRING,  # "Albrook-Miraflores"
+        "url": URL       # http://www.mibus.com.pa/rutas/
       }
     }
   }
@@ -492,18 +522,22 @@ POST structure:
 ```
 stop_sequence: {
 	sequence: INT,
-  unkown_sequence: BOOL, # true = ignores `sequence` and sets it to nil
+  unknown_sequence: BOOL, # true = ignores `sequence` and sets it to nil
   trip_id: INT,          # id of the stop to link to the trip
   stop_id: INT           # id of the trip to link the stop.
 }
 ```
 If the request is successful, it returns the stop sequence detail of the new created resource (i.e: `GET /stop_sequence/:id`).
 
+If `sequence` is not set and `unknown_sequence` is `false` or not set, then the server assigns this stop sequence the last position in trip.
+
+If `sequence`is set to 0 and `unknown_sequence`is `false` or not set, then the server assigns this stop sequence the first position in trip.
+
 
 #### PUT /stops_sequences/:id
 Updates a stops sequence.
 
-PUT structure, all the values are optional
+PUT structure, all the values are optional.
 
 ```
 stop_sequence: {
@@ -516,6 +550,7 @@ stop_sequence: {
 
 If the request is successful, it returns the stop sequence detail of the updated resource (ie: same response as `GET /stop_sequences/:id`).
 
+See `POST /stop_sequences/` to know more about the usage of `sequence` and `unknown_sequence`. 
 
 #### DELETE /stops_sequences/:id
 Removes a stop sequence.
@@ -531,9 +566,11 @@ The response is an HTTP code 200 (success) and an empty response body if the res
 
 ## Export Calls
 
-There is a set of calls to get the resources that have been created or changed since a particular date.
+There is a set of calls to get the resources that have been created or updated since a particular date.
 
 These calls are useful either to get a full database dump or to keep track of the hanges changes in the server database (incremental upates, monitoring).
+
+__TODO__: Please note that, right now these calls don't include information about deletes (ie: only returns new items that have been created or updated). This is a caveat that is expected to be solved after mergin the features/auditable branch.
 
 The format is the following: 
 
@@ -559,11 +596,27 @@ GET /v1/trips/since/0.csv
 GET /v1/stop_sequences/since/0.csv
 ```
 
+## Exporting stops to KML and GPX
+The API also supports exporting the stops to [Google Earth/Google Maps KML](http://en.wikipedia.org/wiki/Keyhole_Markup_Language) and [GPS Exchange Format (GPX)](http://en.wikipedia.org/wiki/GPS_Exchange_Format). These are the calls:
 
-# Setting up your panatrans API server
+```
+GET /v1/stops.kml
+GET /v1/stops.gpx
+```
+
+Example:
+
+* http://test-panatrans.herokuapp.com/stops.kml
+* http://test-panatrans.herokuapp.com/stops.gpx
+
+
+# Setting up your own panatrans API server
+
+If you want to set up you own server for development purposes here you have the instructions.
 
 The API has been developed in Ruby on Rails. It has been tested using Ruby 2.1.2 and Rails 4.1.6.
 
+panatrans-api is also [heroku-friendly](http://www.heroku.com), so you can test the project on that environment.
 
 ## Setup: short version
 To create a local version of the server API run these commands: 

@@ -6,11 +6,7 @@ module V1
     test "should respond to route.index" do
         assert_routing '/v1/routes', { format: 'json', controller: "v1/routes", action: "index" }
     end
-    
-    test "should respond to route.with_trips" do
-        assert_routing '/v1/routes/with_trips', { format: 'json', controller: "v1/routes", action: "with_trips" }
-    end
-        
+          
     test "should respond to route.show" do
         assert_routing '/v1/routes/1', { format: 'json', controller: "v1/routes", action: "show", id: "1" }
     end
@@ -23,12 +19,14 @@ module V1
       xhr :get, :index
       assert_response :success
       assert_not_nil assigns(:routes)
+      assert_not assigns(:with_trips)
     end
   
     test "should get list of routes with the trips linked to each route" do
-      xhr :get, :with_trips
+      xhr :get, :index, {with_trips: "true"}
       assert_response :success
       assert_not_nil assigns(:routes)
+      assert assigns(:with_trips)
     end
     
     test "should get a route" do
