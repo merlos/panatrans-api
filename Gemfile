@@ -53,4 +53,4 @@ gem 'acts_as_list' #order stop_sequences
 gem 'haversine' # calculate distance
 gem 'git', '~> 1.2.9.1' # git
 gem 'ruby_kml' # to export stops as kml
-gem 'andrewhao-gpx'  #, git: 'https://github.com/andrewhao/gpx.git' # to export stops as gpx
+gem 'andrewhao-gpx', git: 'https://github.com/merlos/gpx.git' # to export stops as gpx

@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/merlos/gpx.git
+  revision: 57b2859019853149979e7d397b44d47d0d81459e
+  specs:
+    andrewhao-gpx (0.8)
+      nokogiri
+      rake
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -29,9 +37,6 @@ GEM
       tzinfo (~> 1.1)
     acts_as_list (0.6.0)
       activerecord (>= 3.0)
-    andrewhao-gpx (0.7)
-      nokogiri
-      rake
     arel (5.0.1.20140414130214)
     builder (3.2.2)
     coffee-rails (4.0.1)
@@ -128,7 +133,7 @@ PLATFORMS
 
 DEPENDENCIES
   acts_as_list
-  andrewhao-gpx
+  andrewhao-gpx!
   coffee-rails (~> 4.0.0)
   git (~> 1.2.9.1)
   haversine

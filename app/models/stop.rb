@@ -18,7 +18,7 @@ class Stop < ActiveRecord::Base
   # stops nearby the center of a position.
   # receives 3 params :lat, :lon, :radius
   #
-  # BTW, it searchs within a square
+  # BTW, it searchs within a square (efficiency)
   #
   def self.nearby (params)
     lat, lon, radius = params.values_at :lat, :lon, :radius
@@ -38,26 +38,29 @@ class Stop < ActiveRecord::Base
     Stop.where(lat: min_lat..max_lat, lon: min_lon..max_lon) 
   end
   
-  
+  # export to Google Earth KML
   def self.to_kml 
     kml = KMLFile.new
-    folder = KML::Folder.new(:name => 'Panatrans')
+    folder = KML::Folder.new(name: 'Panatrans')
     all.each do |stop|
       folder.features << KML::Placemark.new(
           :name => stop.name,
-        :geometry => KML::Point.new(:coordinates => {:lat => stop.lat, :lng => stop.lon})
+        :geometry => KML::Point.new(coordinates: { lat: stop.lat, lng: stop.lon})
       )
     end
     kml.objects << folder
     kml.render    
   end
   
+  # export to gpx
   def self.to_gpx
     require 'GPX'
-    gpx = GPX::GPXFile.new
+    gpx = GPX::GPXFile.new(name: 'Panatrans')
+    gpx.attributes.creator = "Panatrans.org "
+    
     all.each do |stop|
       gpx.waypoints << GPX::Waypoint.new({name: stop.name, lat: stop.lat, lon: stop.lon, time: stop.updated_at})
-    end 
+    end     
     gpx.to_s
   end
   
