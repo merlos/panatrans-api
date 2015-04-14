@@ -48,7 +48,11 @@ class DatasetHelper
         #only import if method csv_import is defined on the model
         filepath = csv_dir + '/' + model.to_s.tableize  + ".csv"
         model.csv_import(filepath) if (model.respond_to? :csv_import) && (File.readable? (filepath))
-      end
-    end # transaction  
+      end      
+      # reset sequences
+      ActiveRecord::Base.connection.tables.each do |t|
+        ActiveRecord::Base.connection.reset_pk_sequence!(t)
+      end 
+    end # transaction 
   end
 end # class
