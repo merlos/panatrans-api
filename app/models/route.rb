@@ -5,7 +5,7 @@ class Route < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true, length: { minimum: 5}
   validates :url, format: { with: URI.regexp }, allow_nil: true
   # Associations
-  has_many :trips
+  has_many :trips, -> { order('direction ASC')} 
   
   
 end
