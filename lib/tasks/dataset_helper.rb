@@ -70,10 +70,13 @@ class DatasetHelper
         filepath = csv_dir + '/' + model.to_s.tableize  + ".csv"
         model.csv_import(filepath) if (model.respond_to? :csv_import) && (File.readable? (filepath))
       end      
-      # reset sequences
-      ActiveRecord::Base.connection.tables.each do |t|
-        ActiveRecord::Base.connection.reset_pk_sequence!(t)
-      end 
+      # Patch for heroku + postgres db. 
+      # reset sequences if responds to reset_pk_sequence! 
+      if ActiveRecord::Base.connection.respond_to? (:reset_pk_sequence!) 
+        ActiveRecord::Base.connection.tables.each do |t|
+          ActiveRecord::Base.connection.reset_pk_sequence!(t) 
+        end 
+      end
     end # transaction 
   end
 end # class

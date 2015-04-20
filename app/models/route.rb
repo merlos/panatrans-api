@@ -23,6 +23,8 @@
 class Route < ActiveRecord::Base
   include Csvable
   
+  scope :ordered, -> { order('name ASC') }
+  
   # Validations
   validates :name, presence: true, uniqueness: true, length: { minimum: 5}
   validates :url, format: { with: URI.regexp }, allow_nil: true
