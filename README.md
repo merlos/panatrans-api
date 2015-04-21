@@ -2,6 +2,12 @@
 
 API for the public bus tranportation system of Ciudad de Panamá (Panamá).
 
+[![Build Status](https://travis-ci.org/merlos/panatrans-api.svg)](https://travis-ci.org/merlos/panatrans-api)
+
+[![Code Climate](https://codeclimate.com/github/merlos/panatrans-api/badges/gpa.svg)](https://codeclimate.com/github/merlos/panatrans-api)
+
+[![Test Coverage](https://codeclimate.com/github/merlos/panatrans-api/badges/coverage.svg)](https://codeclimate.com/github/merlos/panatrans-api)
+
 ## About
 Panatrans is a collaborative project to allow the users of the panamenian public transport to create a dataset with the information of the stops and routes available in the City of Panama (which is currently inexistent).
 

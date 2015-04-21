@@ -37,3 +37,6 @@
 /log/*.log
 /tmp
 .keep
+coverage/.last_run.json
+coverage/.resultset.json
+coverage/.resultset.json.lock

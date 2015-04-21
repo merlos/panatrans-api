@@ -69,6 +69,9 @@ gem 'spring',        group: :development
 gem 'rails_12factor', group: :production
 gem 'pg', group: [:production]
 
+# Code Climate
+gem 'codeclimate-test-reporter', group: :test, require: nil
+
 # Required by the API
 gem 'nokogiri' # scrapping metrobus
 gem 'acts_as_list' #order stop_sequences
