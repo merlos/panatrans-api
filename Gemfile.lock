@@ -49,6 +49,7 @@ GEM
     git (1.2.9.1)
     haversine (0.3.0)
     hike (1.2.3)
+    hirb (0.7.3)
     i18n (0.7.0)
     jbuilder (2.2.8)
       activesupport (>= 3.0.0, < 5)
@@ -141,6 +142,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   git (~> 1.2.9.1)
   haversine
+  hirb
   jbuilder (~> 2.0)
   jquery-rails
   nokogiri

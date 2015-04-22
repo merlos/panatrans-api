@@ -71,6 +71,7 @@ gem 'pg', group: [:production]
 
 # Code Climate
 gem 'codeclimate-test-reporter', group: :test, require: nil
+gem 'hirb', group: :development
 
 # Required by the API
 gem 'nokogiri' # scrapping metrobus

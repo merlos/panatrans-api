@@ -30,7 +30,7 @@ class Stop < ActiveRecord::Base
   
   # Associations
   has_many :stop_sequences
-  has_many :trips, through: :stop_sequences 
+  has_many :trips, -> { uniq }, through: :stop_sequences
   
   def routes
     Route.joins(trips: :stops).distinct.where(stops: {id: self.id}).order('name ASC')
