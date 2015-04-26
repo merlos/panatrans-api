@@ -26,7 +26,7 @@ module V1
     before_action :set_stop, only: [:show, :update, :destroy]
   
     def index 
-      @stops = Stop.all.order('name ASC')
+      @stops = Stop.all.ordered
       respond_to do |format|
         format.json {render :index}
         format.kml { send_data @stops.to_kml, filename: controller_name + '.kml' }

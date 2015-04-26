@@ -22,6 +22,8 @@
 
 class Stop < ActiveRecord::Base
   include Csvable
+  
+  scope :ordered, -> { order('name ASC') }
     
   # Validations
   validates :lat, presence: true, numericality: { greater_than: -90.000000, less_than: 90.000000}

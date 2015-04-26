@@ -85,6 +85,11 @@ In every API response there is a "status". Possible values are:
 	}
 	```
 
+## Staging Environment
+If you plan to develop a client or a mobile app we recommend you to setup a local instance of Panatrans API (you have the instructions below in the section "Setting up your own panatrans API server"). Also, we've setup a staging environment that you can use to test your app http://test-panatrans.herokuapp.com/. 
+
+To release an app that points to the production environment, please contact us by submitting an issue or send a github message to @merlos. 
+
 ## ROUTES
 
 ### GET /routes/[?with_trips=true]
