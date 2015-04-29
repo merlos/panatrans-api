@@ -69,7 +69,7 @@ gem 'hirb', group: :development
 # HEROKU
 gem 'rails_12factor', group: :production
 gem 'pg', group: [:production]
-gem 'puma’
+gem 'puma', group: [:production]
 
 # Code Climate
 gem 'codeclimate-test-reporter', group: :test, require: nil
