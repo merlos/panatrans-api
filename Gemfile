@@ -69,6 +69,7 @@ gem 'hirb', group: :development
 # HEROKU
 gem 'rails_12factor', group: :production
 gem 'pg', group: [:production]
+gem 'puma', group: [:production]
 
 # Code Climate
 gem 'codeclimate-test-reporter', group: :test, require: nil
@@ -79,5 +80,4 @@ gem 'acts_as_list' #order stop_sequences
 gem 'haversine' # calculate distance
 gem 'git', '~> 1.2.9.1' # git
 gem 'ruby_kml' # to export stops as kml
-#gem 'andrewhao-gpx', git: 'https://github.com/merlos/gpx.git' # to export stops as gpx
 gem 'andrewhao-gpx', '~> 0.8'
