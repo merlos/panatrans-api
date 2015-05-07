@@ -90,6 +90,13 @@ If you plan to develop a client or a mobile app we recommend you to setup a loca
 
 To release an app that points to the production environment, please contact us by submitting an issue or send a github message to @merlos. 
 
+## Examples of usage
+
+Examples of usage of this API are available on the `public/examples/` folder. Live demos:
+
+* [Stop density heatmap](http://test-panatrans.herokuapp.com/examples/heatmap/). Requests stops and displays a heatmap with the density. It uses [jquery](https://jquery.com/), [leaflet](http://leafletjs.com) and [leaflet-heatmap plugin](http://www.patrick-wied.at/static/heatmapjs/).
+
+
 ## ROUTES
 
 ### GET /routes/[?with_trips=true]
