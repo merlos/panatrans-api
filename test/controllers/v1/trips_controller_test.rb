@@ -23,7 +23,14 @@
 module V1
   class TripsControllerTest < ActionController::TestCase
 
-    # Rails Routes
+    def setup 
+      #
+      # By default we assume tha we are NOT on a read_only_mode, that is
+      # the API allows to modify the database
+      # For tests of read only mode, read_only_mode will be set true
+      #
+      Rails.configuration.x.read_only_mode = false
+    end
     
     test "should respond to trip.show" do
         assert_routing '/v1/trips/1', { format: 'json', controller: "v1/trips", action: "show", id: "1" }
@@ -83,6 +90,57 @@ module V1
       #verify db updated
       @s2 = Trip.find(@s.id)
       assert_equal new_headsign, @s2.headsign
+    end
+    
+    test "should delete a trip" do
+      Rails.configuration.read_only_mode = true
+      @s = trips(:albrook_miraflores)
+      @count = Trip.all.count
+      xhr :delete, :destroy, {id: @s.id}
+      assert_response :success
+      assert_raises (ActiveRecord::RecordNotFound) {
+        @s2 = Trip.find(@s.id)
+      }
+      assert_not_equal @count + 1, Trip.all.count
+    end
+  
+    #
+    # Read only mode tests
+    #
+    
+    test "should NOT create a trip" do
+      Rails.configuration.x.read_only_mode = true
+      
+      number_of_trips = Trip.all.count
+      route = routes(:albrook_miraflores)
+      xhr :post, :create, {trip: {headsign: "Testing tin!", direction: 1, route_id: route.id}}
+      assert_response :forbidden
+      #also check there is another trip
+      assert_equal number_of_trips, Trip.all.count
+    end
+    
+    test "should NOT update a trip" do
+      Rails.configuration.x.read_only_mode = true
+      
+      @s = trips(:albrook_miraflores)
+      new_headsign = "Testing ting ting"
+      assert_not_equal new_headsign, @s.headsign 
+      xhr :patch, :update, {id: @s.id, trip: { headsign: new_headsign}}
+      assert_response :forbidden
+      #verify db updated
+      @s2 = Trip.find(@s.id)
+      assert_not_equal new_headsign, @s2.headsign
+    end
+    
+    test "should NOT delete a trip" do
+      Rails.configuration.x.read_only_mode = true
+      
+      @s = trips(:albrook_miraflores)
+      @count = Trip.all.count
+      xhr :delete, :destroy, {id: @s.id}
+      assert_response :forbidden
+      assert Trip.find(@s.id) # stop still exists
+      assert_equal @count, Trip.all.count
     end
     
   end

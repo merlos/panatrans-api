@@ -23,7 +23,14 @@
 module V1
   class StopsControllerTest < ActionController::TestCase
 
-    # Rails Routes
+    def setup 
+      #
+      # By default we assume tha we are NOT on a read_only_mode, that is
+      # the API allows to modify the database
+      # For tests of read only mode, read_only_mode will be set true
+      #
+      Rails.configuration.x.read_only_mode = false
+    end
     
     test "should respond to stop.show" do
         assert_routing '/v1/stops/1', { format: 'json', controller: "v1/stops", action: "show", id: "1" }
@@ -91,9 +98,21 @@ module V1
       new_name = "Testing ting ting"
       assert_not_equal new_name, @s.name 
       xhr :patch, :update, {id: @s.id, stop: { name: new_name}}
+      assert_response :success
       #verify db updated
       @s2 = Stop.find(@s.id)
       assert_equal new_name, @s2.name
+    end
+    
+    test "should delete a stop" do
+      @s = stops(:albrook)
+      @count = Stop.all.count
+      xhr :delete, :destroy, {id: @s.id}
+      assert_response :success
+      assert_raises (ActiveRecord::RecordNotFound) {
+        @s2 = Stop.find(@s.id)
+      }
+      assert_equal @count -1 , Stop.all.count
     end
     
     test "should return nearby stops" do
@@ -124,6 +143,44 @@ module V1
       assert_response :success
       # check content type
       assert_equal :kml, Mime::Type.lookup(@response.content_type).to_sym
+    end
+    
+    #
+    # READ ONLY MODE TESTS
+    #
+  
+    test "should NOT create a stop" do
+      Rails.configuration.x.read_only_mode = true
+        
+      number_of_stops = Stop.all.count
+      xhr :post, :create, {stop: {name: "Testing tin!", lat: 3.1, lon: 40.0}}
+      assert_response :forbidden
+      #also check there is NO a new stop
+      assert_equal number_of_stops, Stop.all.count
+    end
+    
+    test "should NOT update a stop" do
+      Rails.configuration.x.read_only_mode = true
+      
+      @s = stops(:albrook)
+      new_name = "Testing ting ting"
+      assert_not_equal new_name, @s.name 
+      xhr :patch, :update, {id: @s.id, stop: { name: new_name}}
+      assert_response :forbidden
+      #verify db updated
+      @s2 = Stop.find(@s.id)
+      assert_not_equal new_name, @s2.name
+    end
+    
+    test "should NOT delete a stop" do
+      Rails.configuration.x.read_only_mode = true
+      
+      @s = stops(:albrook)
+      @count = Stop.all.count
+      xhr :delete, :destroy, {id: @s.id}
+      assert_response :forbidden
+      assert Stop.find(@s.id) # stop still exists
+      assert_equal @count, Stop.all.count
     end
     
   end

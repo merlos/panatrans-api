@@ -24,7 +24,10 @@ module V1
   class StopsController < ApplicationController
     
     before_action :set_stop, only: [:show, :update, :destroy]
-  
+    
+    #Note check_read_only_mode is defined in Application controller
+    before_action :check_read_only_mode, only: [:create, :update, :destroy]
+   
     def index 
       @stops = Stop.all.ordered
       respond_to do |format|

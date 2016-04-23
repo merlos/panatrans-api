@@ -21,8 +21,18 @@
 # THE SOFTWARE.
 
 module V1
+  
   class RoutesControllerTest < ActionController::TestCase
-
+    
+    def setup 
+      #
+      # By default we assume tha we are NOT on a read_only_mode, that is
+      # the API allows to modify the database
+      # For tests of read only mode, read_only_mode will be set true
+      #
+      Rails.configuration.x.read_only_mode = false
+    end 
+    
     # Rails Routes
     test "should respond to route.index" do
         assert_routing '/v1/routes', { format: 'json', controller: "v1/routes", action: "index" }
@@ -59,13 +69,11 @@ module V1
     
     test "should create a route" do
       number_of_routes = Route.all.count
-      
       xhr :post, :create, {route: {name: "Testing tin!"}}
       assert_response :success
       
       #puts response.body
       assert_not_nil assigns(:route)
-      
       #check there is another route
       assert_equal number_of_routes + 1, Route.all.count
     end
@@ -93,11 +101,58 @@ module V1
       assert_equal new_name, r2.name
     end
     
+    test "should delete a route" do
+      r = routes(:albrook_miraflores);
+      xhr :delete, :destroy, {id: r.id}
+      assert_response :success
+      
+      # now check that it was certainly removed
+      assert_raise (ActiveRecord::RecordNotFound) {
+        r2 = Route.find(r.id)
+      }
+      #assert_response :not_found # ----- TODO ??
+    end
+    
     test "should throw error if try to delete an inexistent resource" do
       assert_raise (ActiveRecord::RecordNotFound) {
         xhr :delete, :destroy, {id: 123456789}
       }
       #assert_response :not_found # ----- TODO ??
+    end
+    
+    
+    #######
+    # TESTS for READ ONLY MODE 
+    #######
+    test "should NOT create a route if read only mode" do
+      Rails.configuration.x.read_only_mode = true
+      number_of_routes = Route.all.count
+      xhr :post, :create, {route: {name: "Testing tin!"}}
+      assert_response :forbidden
+      
+      #check there is another route
+      assert_equal number_of_routes, Route.all.count
+    end
+    
+    test "should NOT update a route if read_oly_mode" do
+      Rails.configuration.x.read_only_mode = true
+      r = routes(:albrook_miraflores)
+      new_name = "Testing ting ting"
+      assert_not_equal new_name, r.name 
+      xhr :patch, :update, {id: r.id, route: { name: new_name}}
+      assert_response :forbidden
+      #verify db updated
+      r2 = Route.find(r.id)
+      assert_not_equal new_name, r2.name
+    end
+    
+    test "should NOT delete a route if read_only_mode" do
+      Rails.configuration.x.read_only_mode = true
+      r = routes(:albrook_miraflores)
+      xhr :delete, :destroy, {id: r.id}
+      assert_response :forbidden 
+      assert Route.find(r.id)
+      
     end
     
     

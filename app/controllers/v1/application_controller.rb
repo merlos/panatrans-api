@@ -67,7 +67,13 @@ module V1
     end
   
     protected
-
+    def check_read_only_mode 
+      if Rails.configuration.x.read_only_mode == true
+        render_json_fail(403, 'Forbidden')
+        return false
+      end
+    end
+      
     def default_response_data
       @status = Status[:success]
       # prettify param makes the json output more readable for humans. 

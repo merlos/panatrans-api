@@ -24,7 +24,14 @@ module V1
   class StopSequencesControllerTest < ActionController::TestCase
 
 
-    # Rails Routes
+    def setup 
+      #
+      # By default we assume tha we are NOT on a read_only_mode, that is
+      # the API allows to modify the database
+      # For tests of read only mode, read_only_mode will be set true
+      #
+      Rails.configuration.x.read_only_mode = false
+    end
     
     test "should respond to stop_sequence.show" do
         assert_routing '/v1/stop_sequences/1', { format: 'json', controller: "v1/stop_sequences", action: "show", id: "1" }
@@ -142,6 +149,57 @@ module V1
       assert_equal @count-1, StopSequence.all.count
     end
     
+    
+    
+    # TEST FOR read_only_mode
+    
+    test "should NOT create a stop_sequence" do
+      Rails.configuration.x.read_only_mode = true
+      
+      number_of_stop_sequences = StopSequence.all.count
+      @trip = routes(:albrook_miraflores)
+      @stop = stops(:albrook)
+      xhr :post, :create, {stop_sequence: {sequence: 10, stop_id: @stop.id, trip_id: @trip.id}}
+      assert_response :forbidden
+      #also check the number of stop_sequences
+      assert_equal number_of_stop_sequences, StopSequence.all.count
+    end
+    
+    
+    test "should NOT update a stop_sequence" do
+      Rails.configuration.x.read_only_mode = true
+      
+      @s = stop_sequences(:alb_mir_1)
+      new_sequence = 10
+      assert_not_equal new_sequence, @s.sequence 
+      xhr :patch, :update, {id: @s.id, stop_sequence: { sequence: new_sequence}}
+      assert_response :forbidden
+      #verify db was not updated
+      @s2 = StopSequence.find(@s.id)
+      assert_not_equal new_sequence, @s2.sequence
+    end
+    
+    
+    test "should NOT delete a stop_sequence providing the id" do
+      Rails.configuration.x.read_only_mode = true
+      @s = stop_sequences(:alb_mir_1)
+      @count = StopSequence.all.count
+      xhr :delete, :destroy, {id: @s.id}
+      assert_response :forbidden
+      assert StopSequence.find(@s.id)
+      assert_equal @count, StopSequence.all.count
+    end
+  
+    
+    test "should NOT delete a stop_sequence with trip and stop ids" do
+      Rails.configuration.x.read_only_mode = true
+      @s = stop_sequences(:alb_mir_1)
+      @count = StopSequence.all.count
+      xhr :delete, :destroy_by_trip_and_stop, {stop_id: @s.stop_id, trip_id: @s.trip_id}
+      assert_response :forbidden
+      assert StopSequence.find(@s.id)
+      assert_equal @count, StopSequence.all.count
+    end
     
   end
 end

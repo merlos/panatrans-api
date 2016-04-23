@@ -21,7 +21,7 @@
 # THE SOFTWARE.
 
 Rails.application.routes.draw do
-   get ':controller/since/:seconds_since_epoc', to: :since, constraints: { controller: /v1\/(stop_sequences)\//, seconds_since_epoc: /[0-9]+/},  defaults: { format: 'json' } 
+   get ':controller/since/:seconds_since_epoc', action: :since, constraints: { controller: /v1\/(stop_sequences)\//, seconds_since_epoc: /[0-9]+/},  defaults: { format: 'json' } 
   
   namespace :v1 do
     get "/routes/with_trips", to: "routes#with_trips",  defaults: { format:'json' }

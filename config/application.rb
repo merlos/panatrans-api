@@ -42,13 +42,32 @@ module PanatransApi
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
     
-    # accept CORS http://demisx.github.io/rails-api/2014/02/18/configure-accept-headers-cors.html
+    # Accept CORS http://demisx.github.io/rails-api/2014/02/18/configure-accept-headers-cors.html
     config.action_dispatch.default_headers = {
       'Access-Control-Allow-Origin' => '*', #<-- instead of * you can set a domain
       'Access-Control-Request-Method' => %w{GET POST PUT OPTIONS DELETE}.join(","),
       'Access-Control-Allow-Methods' => %w{GET POST PUT OPTIONS DELETE}.join(","),
       'Access-Control-Allow-Headers'=> 'Origin, Authorization, Accept, Content-Type'
-        }
+    }
     
+    # To remove a deprecation warning
+    #DEPRECATION WARNING: Currently, Active Record suppresses errors raised within 
+    #`after_rollback`/`after_commit` callbacks and only print them to the logs. In 
+    #the next version, these errors will no longer be suppressed. Instead, the errors 
+    #will propagate normally just like in other Active Record callbacks.
+    config.active_record.raise_in_transactional_callbacks = true
+    
+    #
+    # READ ONLY MODE
+    #
+    # If you set this variable to true, then all methods that 
+    # 
+    # This option is very useful for agencies that are using this API and don't want users
+    # to mess with the data
+    #
+    # read_only_mode = false is intended for communities that are taking advantage of 
+    # the wisdom of the crowd (something like wikipedia)
+    #
+    config.x.read_only_mode = false;    
   end
 end

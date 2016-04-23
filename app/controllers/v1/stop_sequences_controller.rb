@@ -24,6 +24,10 @@ module V1
   class StopSequencesController < ApplicationController
     before_action :set_stop_sequence, only: [:show, :update, :destroy]
     
+    #Note check_read_only_mode is defined in Application controller
+    before_action :check_read_only_mode, only: [:create, :update, :destroy, :destroy_by_trip_and_stop]
+    
+    
     def index 
       @stop_sequences = StopSequence.all
     end

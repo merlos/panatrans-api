@@ -24,6 +24,9 @@ module V1
   class RoutesController < ApplicationController
     before_action :set_route, only: [:show, :update, :destroy]
     
+    # Note check_read_only_mode is defined in Application controller
+    before_action :check_read_only_mode, only: [:create, :update, :destroy]
+    
     def index 
       @with_trips = %w(1 yes true).include?(params["with_trips"])
       if @with_trips

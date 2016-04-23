@@ -24,6 +24,10 @@ module V1
   class TripsController < ApplicationController
     before_action :set_trip, only: [:show, :update, :destroy]
     
+    #Note check_read_only_mode is defined in Application controller
+    before_action :check_read_only_mode, only: [:create, :update, :destroy]
+   
+    
     def index 
       @trips = Trip.all.includes(:route)
     end
