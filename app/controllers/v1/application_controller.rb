@@ -69,7 +69,7 @@ module V1
     protected
     def check_read_only_mode 
       if Rails.configuration.x.read_only_mode == true
-        render_json_fail(403, 'Forbidden')
+        render_json_fail(403, ['Forbidden'])
         return false
       end
     end

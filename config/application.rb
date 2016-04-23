@@ -68,6 +68,6 @@ module PanatransApi
     # read_only_mode = false is intended for communities that are taking advantage of 
     # the wisdom of the crowd (something like wikipedia)
     #
-    config.x.read_only_mode = false;    
+    config.x.read_only_mode = false
   end
 end

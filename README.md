@@ -64,8 +64,10 @@ In every API response there is a "status". Possible values are:
 
 2. `fail`, there was a problem performing the operation (ie: incorrect value while creating or updating a resource). The list of problems is passed throught the `errors` object. Example:
 
-	<!-- curl -X POST --data "stops[name]=2" http://test-panatrans.herokuapp.com/v1/stops/-->
+	
 	```json
+	#curl -X POST --data "stops[name]=2" http://test-panatrans.herokuapp.com/v1/stops/
+
 	{
 	  "status":"fail",
 	  "errors": {
@@ -73,17 +75,24 @@ In every API response there is a "status". Possible values are:
 		"lon":["can't be blank","is not a number"]
 		}
 	}
-	```
+	```	
 
+## Read only mode
 
-3. `<number>`, where number is an HTTP error (ie: 404 not found. The error string is passed through `error`. HTTP response status is != 200. 
+When the read only mode is activated any API method that modifies the database returns fail and a HTTP status 403 (Forbidden).  
 
-	```json
+```json
+	# Example. Try to update stopname
+	# curl -X POST --data "stops[name]=2" http://test-panatrans.herokuapp.com/v1/stops/ 
+	# http status is 403 Forbidden
+	# and the medhod response
 	{
-		"status":"404",
-		"error":"Not Found"
+		"status":"fail",
+		"error": ["Forbidden"]
 	}
-	```
+```
+
+Please see the configuration section below on this file for more info about this mode
 
 ## Staging Environment
 If you plan to develop a client or a mobile app we recommend you to setup a local instance of Panatrans API (you have the instructions below in the section "Setting up your own panatrans API server"). Also, we've setup a staging environment that you can use to test your app http://test-panatrans.herokuapp.com/. 
@@ -712,6 +721,21 @@ http://localhost:3000/v1/
 ```
 
 And you`ll get a list of available API calls.
+
+
+## Configuration
+
+#### Read only mode (`read_only_mode`)
+
+Read only mode forbids change on the database made through JSON API calls. That is, it disables all the create, update, and delete actions.
+
+In order to activate the `read only mode` (by default is off), you just have to change the variable read_only_mode on the `config/application.rb` file.
+
+```
+ # config/application.rb
+   config.x.read_only_mode = true
+```
+
 
 ## Rake tasks
 
