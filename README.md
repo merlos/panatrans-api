@@ -11,7 +11,7 @@ API for the public bus tranportation system of Ciudad de Panamá (Panamá).
 ## About
 Panatrans is a collaborative project to allow the users of the panamenian public transport to create a dataset with the information of the stops and routes available in the City of Panama (which is currently inexistent).
 
-This project is based in the premise that open software and open data are the key of innovation. 
+This project is based in the premise that open software and open data are the key of innovation.
 
 Collaborative user generated content is another key concept of the project, and in that sense, the API provides universal read and write access to content.  
 
@@ -27,9 +27,9 @@ Specification for developers that plan to make a service or a mobile application
 
 This is a JSON RESTful API.
 
-## Conceptual model 
+## Conceptual model
 
-This API relies in a schema that is an extreme simplification of the [General Transit Feed Specification (GTFS)](https://developers.google.com/transit/gtfs/) defined by Google. 
+This API relies in a schema that is an extreme simplification of the [General Transit Feed Specification (GTFS)](https://developers.google.com/transit/gtfs/) defined by Google.
 
 ![Conceptual model of a route](http://www.merlos.org/panatrans-api/conceptual_route.png "Conceptual model of a route")
 
@@ -39,11 +39,11 @@ There are 4 types of resources:
 
 * __Route__: Represents a bus route, for example: the route from Albrook to Miraflores.
 
-* __Trip__: A route generally has one or two trips. For example, the route Albrook - Miraflores has two trips: (1) the trip from Albrook to Miraflores, and (2) the trip from Miraflores to Albrook. Each trip has a set of stops. These set of stops may be the same or not for both trips. There may be some routes that only have a single trip, for example, circular routes that start and end at the same location. 
+* __Trip__: A route generally has one or two trips. For example, the route Albrook - Miraflores has two trips: (1) the trip from Albrook to Miraflores, and (2) the trip from Miraflores to Albrook. Each trip has a set of stops. These set of stops may be the same or not for both trips. There may be some routes that only have a single trip, for example, circular routes that start and end at the same location.
 
 * __Stop_Sequence__: Links a trip with a stop to create an ordered list of stops. In the example, the trip Albrook to Miraflores has 4 stops, and therefore it has 4 `stop_sequences`, each one will link one of the stops with that trip. The first stop is Albrook (sequence = 0), then Diablo (sequence = 1), Ciudad del Saber (sequence = 2) and the last one Miraflores (sequence = 3).
 
-In any call to the API you'll be requesting any of these resources. 
+In any call to the API you'll be requesting any of these resources.
 
 ## Common stuff in API Responses
 
@@ -64,7 +64,7 @@ In every API response there is a "status". Possible values are:
 
 2. `fail`, there was a problem performing the operation (ie: incorrect value while creating or updating a resource). The list of problems is passed throught the `errors` object. Example:
 
-	
+
 	```json
 	#curl -X POST --data "stops[name]=2" http://test-panatrans.herokuapp.com/v1/stops/
 
@@ -75,7 +75,7 @@ In every API response there is a "status". Possible values are:
 		"lon":["can't be blank","is not a number"]
 		}
 	}
-	```	
+	```
 
 ## Read only mode
 
@@ -83,7 +83,7 @@ When the read only mode is activated any API method that modifies the database r
 
 ```json
 	# Example. Try to update stopname
-	# curl -X POST --data "stops[name]=2" http://test-panatrans.herokuapp.com/v1/stops/ 
+	# curl -X POST --data "stops[name]=2" http://test-panatrans.herokuapp.com/v1/stops/
 	# http status is 403 Forbidden
 	# and the medhod response
 	{
@@ -95,9 +95,9 @@ When the read only mode is activated any API method that modifies the database r
 Please see the configuration section below on this file for more info about this mode
 
 ## Staging Environment
-If you plan to develop a client or a mobile app we recommend you to setup a local instance of Panatrans API (you have the instructions below in the section "Setting up your own panatrans API server"). Also, we've setup a staging environment that you can use to test your app http://test-panatrans.herokuapp.com/. 
+If you plan to develop a client or a mobile app we recommend you to setup a local instance of Panatrans API (you have the instructions below in the section "Setting up your own panatrans API server"). Also, we've setup a staging environment that you can use to test your app http://test-panatrans.herokuapp.com/.
 
-To release an app that points to the production environment, please contact us by submitting an issue or send a github message to @merlos. 
+To release an app that points to the production environment, please contact us by submitting an issue or send a github message to @merlos.
 
 ## Examples of usage
 
@@ -117,14 +117,14 @@ Gets all the routes ordered by name (alphabetical order)
 		"id" : INT,              #route id
 		"name" : STRING,         # "Route name"
     "url" : URL,             # url of the route @ mibus.com.pa. May be null
-		               
+
 		"trips" : [{  # <-- Only sent if with_trips=true
 			"id": INT,            # trip id
 			"headsign": STRING,   # "hacia Albrook"
 			"direction": INT,     # 0=ida, 1= retorno
 		   }, ...
 		]}, ...
-	 ]	
+	 ]
    }
 }			
 ```
@@ -138,14 +138,14 @@ Including trips:
 http://test-panatrans.herokuapp.com/v1/routes/?with_trips=true&prettify=true
 
 ---
-__HINT!__ In any request to the api, if you add to the query string the param `?prettify=true`, the output will be a human readable JSON with indentantion and that kind of stuff. Example: `http://panantransserver.org/v1/routes/?prettify=true` 
+__HINT!__ In any request to the api, if you add to the query string the param `?prettify=true`, the output will be a human readable JSON with indentantion and that kind of stuff. Example: `http://panantransserver.org/v1/routes/?prettify=true`
 
 ---
 
 ### GET /routes/with_trips
 Gets all the routes ordered alphabetically by name and includes the trips linked to each route.
 
-Example: 
+Example:
 
 [https://test-panatrans.herokuapp.com/v1/routes/?prettify=true](https://test-panatrans.herokuapp.com/v1/routes/?prettify=true)
 
@@ -157,7 +157,7 @@ Returns the detail of the route identified by `:id`.
   "status" : "success"
   "data" :  {
   "id" : INT                  # route id
-  "name" : STRING             # "Albrook - Exclusas de Miraflores" 
+  "name" : STRING             # "Albrook - Exclusas de Miraflores"
   "url" : URL,                # URL of the route at mibus.com.pa. May be null
   "trips" : [
     {
@@ -180,13 +180,13 @@ Returns the detail of the route identified by `:id`.
     ...
   ]
 }
-``` 
+```
 * `LATITUDE` is a float within the interval (-90, 90).
 * `LONGITUDE` is a float within the interval (-180, 180).
 
 Note: in the response latitude and longitude are enclosed in `""`.
 
-Example: 
+Example:
 
 [http://test-panatrans.herokuapp.com/v1/routes/1048002442?prettify=true](http://test-panatrans.herokuapp.com/v1/routes/1048002442?prettify=true)
 
@@ -211,7 +211,7 @@ If the request is successful, it returns the route detail of the new created res
 ### DELETE /routes/:id
 Deletes the route with the id `:id`.
 
-The response is an HTTP code 200 (success) and an empty response body if the resource was sucessfully deleted. 
+The response is an HTTP code 200 (success) and an empty response body if the resource was sucessfully deleted.
 
 ### PUT /routes/:id
 Updates a route.
@@ -224,7 +224,7 @@ PUT data structure:
 }
 ```
 
-If the request is successful, it returns the route detail of the updated resource (ie: same as GET /routes/:id). 
+If the request is successful, it returns the route detail of the updated resource (ie: same as GET /routes/:id).
 
 ## STOPS
 
@@ -275,9 +275,9 @@ Adding the option `with_stop_sequences=true` the response will include the stop_
             "headsign": STRING,  # "hacia Marañón",
             "direction": INT,    # 0=> ida/circular, 1=> vuelta,
             "route_id": INT,     # 1048002442
-            
+
             "stop_sequences": [{  # STOP SEQUENCES ARE ONLY SENT if with_stop_sequences=true
-              "id": INT,         # stop_sequence id 
+              "id": INT,         # stop_sequence id
               "sequence": INT,      
               "stop_id": INT,
               "trip_id": INT
@@ -286,11 +286,11 @@ Adding the option `with_stop_sequences=true` the response will include the stop_
             ]
           },
           ...
-         ] 
+         ]
       },
       ...
-    ] 
-  } 
+    ]
+  }
 }
 ```
 Example:
@@ -300,11 +300,11 @@ Example:
 [http://test-panatrans.herokuapp.com/v1/stops/382818451?with_stop_sequences=true&prettify=true](http://test-panatrans.herokuapp.com/v1/stops/382818451?with_stop_sequences=true&prettify=true)
 
 
-#### 
+####
 
 
 ### GET /v1/stops/nearby/?lat=LATITUDE&lon=LONGITUDE&radius=METERS
-Gets the stops in the surroundings of the center `(lat, lon)` within the `radius` (in meters). 
+Gets the stops in the surroundings of the center `(lat, lon)` within the `radius` (in meters).
 
 ```
 {
@@ -330,7 +330,7 @@ http://test-panatrans.herokuapp.com/v1/stops/nearby?lat=8.9656294&lon=-79.549223
 ### POST /stops/
 Creates a new stop
 
-Request data structure: 
+Request data structure:
 ```
 {
  "stop" {
@@ -348,7 +348,7 @@ If the request is successful, it returns the stop detail of the new created stop
 ### PUT /stops/:id
 Updates the stop with the `:id` setting up the values of the request data.
 
-Request data structure: 
+Request data structure:
 
 ```
 {
@@ -367,7 +367,7 @@ If the request is successful, it returns the stop detail of the updated resource
 ### DELETE /stops/:id
 Deletes the stop with the id `:id`.
 
-If the resource was sucessfully deleted, the response is an HTTP code 200 (success) and an empty response body . 
+If the resource was sucessfully deleted, the response is an HTTP code 200 (success) and an empty response body .
 
 
 ## TRIPS
@@ -402,9 +402,9 @@ Example:
 
 
 ### GET /trips/:id
-Gets the detail of the trip with id `:id`. The sequence of stops is returned ordered by sequence number. 
+Gets the detail of the trip with id `:id`. The sequence of stops is returned ordered by sequence number.
 
-A __stop without sequence__ number means that the stop belongs to that trip but the order within the same is unknown. 
+A __stop without sequence__ number means that the stop belongs to that trip but the order within the same is unknown.
 
 ```
 {
@@ -465,7 +465,7 @@ Post data structure:
 {
   "trip": {
   	"headsign": STRING,
-  	"direction": INT,  # Possible values: 0 => go, 1 => return 
+  	"direction": INT,  # Possible values: 0 => go, 1 => return
   }
 }
 ```
@@ -476,12 +476,12 @@ If the request is successful, it returns the trip detail of the updated resource
 #### DELETE /trips/:id
 Deletes the trip with the id `:id`.
 
-The response is an HTTP code 200 (success) and an empty response body if the resource was sucessfully deleted. 
+The response is an HTTP code 200 (success) and an empty response body if the resource was sucessfully deleted.
 
 
 
 ## STOP_SEQUENCES
-Stops sequences link stops to trips. 
+Stops sequences link stops to trips.
 
 #### GET /stop_sequences/
 Gets all stops_sequences
@@ -526,7 +526,7 @@ The first stop in a trip has `sequence = 0`.
     "trip": {
       "id": INT,         # trip_id
       "headsign": STRING # "hacia Miraflores",
-      "direction": INT,  # 
+      "direction": INT,  #
       "route": {         
         "id": INT,       # route id
         "name": STRING,  # "Albrook-Miraflores"
@@ -577,18 +577,18 @@ stop_sequence: {
 
 If the request is successful, it returns the stop sequence detail of the updated resource (ie: same response as `GET /stop_sequences/:id`).
 
-See `POST /stop_sequences/` to know more about the usage of `sequence` and `unknown_sequence`. 
+See `POST /stop_sequences/` to know more about the usage of `sequence` and `unknown_sequence`.
 
 #### DELETE /stops_sequences/:id
 Removes a stop sequence.
 
-The response is an HTTP code 200 (success) and an empty response body if the resource was sucessfully deleted. 
+The response is an HTTP code 200 (success) and an empty response body if the resource was sucessfully deleted.
 
 
 #### DELETE /stop_sequences/trip/:trip_id/stop/:stop_id
 Deletes the stop_sequence that links the trip identified by `trip_id` and the stop identified by `stop_id`.
 
-The response is an HTTP code 200 (success) and an empty response body if the resource was sucessfully deleted. 
+The response is an HTTP code 200 (success) and an empty response body if the resource was sucessfully deleted.
 
 
 ## Export Calls
@@ -599,13 +599,13 @@ These calls are useful either to get a full database dump or to keep track of th
 
 __TODO__: Please note that, right now these calls don't include information about deletes (ie: only returns new items that have been created or updated). This is a caveat that is expected to be solved after mergin the features/auditable branch.
 
-The format is the following: 
+The format is the following:
 
 ```
 GET /v1/:resource/since/:seconds_since_epoc(.csv)
 ```
 
-Where 
+Where
 
 * `:resource` can be `stops`,`routes`, `trips` or `stop_sequences`
 
@@ -613,7 +613,7 @@ Where
 
 * `.csv`: optional parameter to get the dump in CSV format.
 
-Example: 
+Example:
 
 ```
 # make a dump of the database in CSV
@@ -646,7 +646,7 @@ The API has been developed in Ruby on Rails. It has been tested using Ruby 2.1.2
 panatrans-api is also [heroku-friendly](http://www.heroku.com), so you can test the project on that environment.
 
 ## Setup: short version
-To create a local version of the server API run these commands: 
+To create a local version of the server API run these commands:
 
 ```
  $ git clone https://github.com/merlos/panatrans-api.git
@@ -656,7 +656,7 @@ To create a local version of the server API run these commands:
  $ rake dataset:update
  $ rails server
 ```
- 
+
 Now you can open your browse at `http://localhost:3000/v1/`, and you'll see the list of API calls available.
 
 You may also want to check the [panatrans-web project](https://github.com/merlos/panatrans-web), that is a web client/editor that makes usage of this API.
@@ -665,7 +665,7 @@ You may also want to check the [panatrans-web project](https://github.com/merlos
 
 #### 1. Download
 
-To get the source code: 
+To get the source code:
 
 ```
 $ git clone https://github.com/merlos/panatrans-api.git
@@ -683,9 +683,9 @@ To create the database run the migrations:
 
 ```
   $ rake db:migrate
-``` 
+```
 
-Then, you can: 
+Then, you can:
 
 1. Load latest version of the panatrans-dataset:
 
@@ -698,7 +698,7 @@ Then, you can:
 	```
 	$ rake dataset:fixtures
 	```
-	
+
 	The loaded data is stored in `tests/fixtures/` in Yaml format.
 
 3. Import your own data. First, leave a copy of the csv files in the directory `./tmp/dataset/`. (see [panatrans-dataset](https://github.com/merlos/panatrans-dataset) project, for more info). Then import it:
@@ -707,7 +707,7 @@ Then, you can:
 	$ rake dataset:import
 	```
 
-	Please note, that these files are overwritten if you perform a `rake dataset:update` or `rake dataset:download`. 
+	Please note, that these files are overwritten if you perform a `rake dataset:update` or `rake dataset:download`.
 
 ### Launch the server
 
@@ -754,7 +754,7 @@ To get a complete list of rake tasks run `rake -T`
 
 #### How to run the test suite
 
-The project includes a set of tests which use the default testing suite that comes with rails (minitest). 
+The project includes a set of tests which use the default testing suite that comes with rails (minitest).
 To run the tests:
 
 ```
@@ -775,8 +775,9 @@ rake dataset:fixtures
 
 
 ## Changelog
-1. V1.0 beta. March 2015. First version.
-
+* March 2015. First release.
+* V1.0.0 April 2016. Added only read option (tag v1.0.0)
+* V2.0 June 2016. Now the ver
 
 # License
 

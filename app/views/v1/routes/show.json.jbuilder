@@ -27,7 +27,7 @@ json.data do
   json.name @route.long_name
   json.trips @route.trips.includes(:stop_times) do |trip|
     json.extract! trip, :id, :headsign, :direction
-    json.stop_times trip.stop_times.includes(:stop).ordered do |sequence|
+    json.stop_sequences trip.stop_times.includes(:stop).ordered do |sequence|
       json.id sequence.id
       json.sequence sequence.stop_sequence
       json.stop sequence.stop, :id, :name, :lat, :lon

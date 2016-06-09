@@ -28,6 +28,9 @@ json.data do
   json.stop @stop_sequence.stop, :id, :name, :lat, :lon
   json.trip do
     json.extract! @stop_sequence.trip, :id, :headsign, :direction
-    json.route @stop_sequence.trip.route, :id, :long_name
+    json.route do
+      json.extract! @stop_sequence.trip.route, :id
+      json.name @stop_sequence.trip.route.long_name
+    end
   end
 end

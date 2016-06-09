@@ -13,9 +13,13 @@ PATH
   remote: ../../panamapps/gtfs/gtfs_api
   specs:
     gtfs_api (0.0.1)
+      andrewhao-gpx (~> 0.8)
+      haversine (~> 0.3.0)
       iso4217-validator (~> 0.0.2)
       iso639-validator (~> 0.0.2)
+      jbuilder (>= 2.1.3)
       rails (~> 4.2.2)
+      ruby_kml (~> 0.1.7)
 
 GEM
   remote: https://rubygems.org/

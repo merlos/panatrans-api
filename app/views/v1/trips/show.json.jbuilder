@@ -24,9 +24,12 @@ json.prettify! if @prettify
 json.status @status
 json.data do
   json.extract! @trip, :id, :headsign, :direction
-  json.route @trip.route, :id, :long_name, :url
-  json.stop_sequences @trip.stop_sequences.includes(:stop).ordered do |sequence|
-    json.extract! sequence, :id, :sequence
+  json.route @trip.route do |route|
+    json.extract! route, :id, :url
+    json.name route.long_name
+  json.stop_times @trip.stop_times.includes(:stop).ordered do |sequence|
+    json.extract! sequence, :id
+    json.sequence sequence.stop_sequence
     json.stop sequence.stop, :id, :name, :lat, :lon
    end
 end

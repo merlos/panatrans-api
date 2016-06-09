@@ -36,7 +36,7 @@ module V1
     end
 
     def create
-      @trip = Trip.new(trip_params)
+      @trip = GtfsApi::Trip.new(trip_params)
       if @trip.save
         render :show, status: :created, location: v1_trip_path(@trip)
       else
@@ -61,7 +61,7 @@ module V1
 
       # Use callbacks to share common setup or constraints between actions.
       def set_trip
-        @trip = Trip.find(params[:id])
+        @trip = GtfsApi::Trip.find(params[:id])
       end
 
       # Never trust parameters from the scary internet, only allow the white list through.
