@@ -1,0 +1,20 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# fare one linked to route_one
+fare_rule_one:
+  fare: fare_one
+  route_id: route_one
+  feed: feed1
+
+# fare two linked to origin_zone and destination zone
+fare_rule_two:
+  fare: fare_two
+  origin_id: zone_one
+  destination_id: zone_two
+  feed: feed1
+
+#fare three linked to a contains_id
+fare_rule_three:
+  fare: fare_three
+  contains_id: zone_two
+  feed: feed1

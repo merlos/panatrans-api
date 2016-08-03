@@ -86,7 +86,5 @@ module V1
       def stop_params
         params.require(:stop).permit(:name, :lat, :lon)
       end
-
-
   end
 end

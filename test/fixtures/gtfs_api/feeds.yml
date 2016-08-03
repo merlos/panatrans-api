@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+feed1:
+  io_id: feed1
+  name: name feed1
+  source_url: http://www.panatrans.org
+  version: 1
+
+feed2:
+  io_id: feed2
+  name: name feed2
+  source_url: http://www.panatrans.org
+  version: 1

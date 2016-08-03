@@ -20,47 +20,28 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-class StopSequence < ActiveRecord::Base
-  include Csvable
+module V1
+  class ShapesControllerTest < ActionController::TestCase
 
-  scope :ordered, -> { order('sequence ASC') }
-  acts_as_list column: :sequence, scope: :trip, top_of_list: 0
+    def setup
+      #
+      # By default we assume tha we are NOT on a read_only_mode, that is
+      # the API allows to modify the database
+      # For tests of read only mode, read_only_mode will be set true
+      #
+      Rails.configuration.x.read_only_mode = false
+    end
 
+    test "should respond to shapes show" do
+        assert_routing '/v1/shapes/1', { format: 'json', controller: "v1/shapes", action: "show", io_id: "1" }
+    end
 
-  # Validations
+    test "should get a shape" do
+      @s = gtfs_api_shapes(:shape_one_1)
+      xhr :get, :show, {io_id: @s.io_id}
+      assert_response :success
+      assert_not_nil assigns(:shape)
+    end
 
-  validates :stop, presence: true
-  validates :trip, presence: true
-  validates :sequence, allow_nil: true, numericality: { only_integer: true}
-
-  before_create :check_if_unknown_sequence
-  before_save :check_if_unknown_sequence
-
-  #Virtual Attributes
-
-  attr_accessor :unknown_sequence #if set, then the sequence is unknown
-
-  def unknown_sequence
-    @unkown_sequence
   end
-
-  # whenever unknown_sequence is set to true, sequence is set to nil
-  # sequence = nil means that the sequence within the list is unknown)
-  def unknown_sequence=(val)
-    @unkown_sequence = (val == true)
-  end
-
-  # by default when sequence is not set acts_as_list saves the record
-  # at the end of the list (the sequence  is set before_validation) For those stops with unknown sequence
-  # we need to avoid this behaviour.
-  def check_if_unknown_sequence
-    self.sequence = nil if self.unknown_sequence
-  end
-
-
-  # Associations
-
-  belongs_to :trip
-  belongs_to :stop
-
 end

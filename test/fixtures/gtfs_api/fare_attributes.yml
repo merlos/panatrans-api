@@ -1,0 +1,28 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+fare_one:
+  io_id: _fare_one
+  price: 1.11
+  currency_type: EUR
+  payment_method: 0 #paid on board
+#  transfers:  #undefined
+  transfer_duration: 1111 #ride time in seconds
+  feed: feed1
+
+fare_two:
+  io_id: _fare_two
+  price: 2.22
+  currency_type: USD
+  payment_method: 1 # paid before boarding
+  transfers: 0 # no transfer
+  transfer_duration: 2222 #time in seconds
+  feed: feed1
+
+fare_three:
+  io_id: _fare_three
+  price: 3.33
+  currency_type: USD
+  payment_method: 1
+  transfers: 2 # 2 transfers
+  transfer_duration: 3333 # time in seconds
+  feed: feed1

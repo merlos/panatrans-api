@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+stop_time_one:
+  trip: trip_one
+  arrival_time: 11:00:00
+  departure_time: 11:15:00
+  stop: stop_one
+  stop_sequence: 1
+  stop_headsign: headsign stop time one
+  pickup_type: 1
+  drop_off_type: 1
+  dist_traveled: 11.11
+  feed: feed1
+
+stop_time_two:
+  trip: trip_two
+  arrival_time: 22:00:00
+  departure_time: 22:15:00
+  stop: stop_two
+  stop_sequence: 2
+  stop_headsign: headsign stop time two
+  pickup_type: 1
+  drop_off_type: 1
+  dist_traveled: 22.22
+  feed: feed1

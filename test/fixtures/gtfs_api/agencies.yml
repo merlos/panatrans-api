@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+agency_one:
+  io_id: _agency_one
+  name: Test Agency
+  url: http://github.com/merlos
+  timezone: Madrid/Spain
+  lang: es
+  phone: +34900123456
+  fare_url: http://github.com/merlos/gtfs-api
+  feed: feed1
+
+agency_two:
+  io_id: _agency_two
+  name: Test Agency two
+  url: http://github.com/merlos
+  timezone: Madrid/Spain
+  lang: en
+  phone: +34900123456
+  fare_url: http://github.com/merlos/gtfs-api
+  feed: feed1

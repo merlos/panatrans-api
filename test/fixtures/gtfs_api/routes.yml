@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+route_one:
+  io_id: _route_one
+  agency: agency_one
+  short_name: route_short_name_one
+  long_name: route_long_name_one
+  desc: route_desc_one
+  route_type: 1
+  url: http://www.route.com/1
+  color: F11111
+  text_color: FFFF11
+  feed: feed1
+
+route_two:
+  io_id: _route_two
+  agency: agency_one
+  short_name: route_short_name_two
+  long_name: route_long_name_two
+  desc: route_desc_one
+  route_type: 1
+  url: http://www.route.com/1
+  color: F22222
+  text_color: FFFF22
+  feed: feed1

@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+frequency_one:
+  trip: trip_one
+  start_time: 18:00:00
+  end_time: 24:00:00
+  headway_secs: 1100
+  exact_times: 0
+  feed: feed1
+
+frequency_two:
+  trip: trip_two
+  start_time: 23:00:00
+  end_time: 25:00:00
+  headway_secs: 2200
+  exact_times: 1
+  feed: feed1

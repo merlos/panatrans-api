@@ -1,0 +1,18 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+feed_info_one:
+  publisher_name: publisher_name_one
+  publisher_url: http://publisher.url/one
+  lang: es
+  start_date: 2014-07-13
+  end_date: 2024-07-13
+  version: 1.0.0
+  feed: feed1
+
+#feed_info_two:
+#  feed_publisher_name: MyString
+#  feed_publisher_url: MyString
+#  feed_lang: MyString
+#  feed_start_date: 2014-07-13
+#  feed_end_date: 2014-07-13
+#  feed_version: MyString

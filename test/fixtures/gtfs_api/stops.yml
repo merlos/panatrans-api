@@ -1,0 +1,61 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# zone 1
+stop_one:
+  io_id: _stop_one
+  code: stop_code_one
+  name: stop_name_one
+  desc: stop_desc_one
+  lat: 9.11
+  lon: 9.11
+  zone_id: zone_one
+  url: http://stop.url/one
+  location_type: 1
+  io_parent_station: _stop_two
+  parent_station: stop_two
+  timezone: Madrid/Spain
+  wheelchair_boarding: 1
+  feed: feed1
+
+stop_two:
+  io_id: _stop_two
+  code: stop_code_two
+  name: stop_name_two
+  desc: stop_desc_two
+  lat: 9.22
+  lon: 9.22
+  zone_id: zone_one
+  url: http://stop.url/two
+  location_type: 1
+  timezone: Madrid/Spain
+  wheelchair_boarding: 1
+  feed: feed1
+
+# zone two
+stop_three:
+  io_id: _stop_three
+  code: stop_code_three
+  name: stop_name_three
+  desc: stop_desc_three
+  lat: 9.33
+  lon: 9.33
+  zone_id: zone_two
+  url: http://stop.url/three
+  location_type: 1
+  timezone: Madrid/Spain
+  wheelchair_boarding: 1
+  feed: feed1
+
+stop_four:
+  io_id: _stop_four
+  code: stop_code_four
+  name: stop_name_four
+  desc: stop_desc_four
+  lat: 9.44
+  lon: 9.44
+  zone_id: zone_two
+  url: http://stop.url/four
+  location_type: 1
+  timezone: Madrid/Spain
+  wheelchair_boarding: 1
+  feed: feed1

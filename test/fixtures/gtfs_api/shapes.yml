@@ -1,0 +1,54 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+shape_one_1:
+  id: 1
+  io_id: '_shape_one'
+  pt_lat: 1.11
+  pt_lon: 1.11
+  pt_sequence: 1
+  dist_traveled: 0.00
+  feed: feed1
+
+shape_one_2:
+  io_id: '_shape_one'
+  pt_lat: 1.22
+  pt_lon: 1.22
+  pt_sequence: 2
+  dist_traveled: 1.22
+  feed: feed1
+
+
+shape_one_3:
+  io_id: '_shape_one'
+  pt_lat: 1.33
+  pt_lon: 1.33
+  pt_sequence: 3
+  dist_traveled: 1.33
+  feed: feed1
+
+# shape two
+
+shape_two_1:
+  io_id: '_shape_two'
+  pt_lat: 2.11
+  pt_lon: 2.11
+  pt_sequence: 1
+  dist_traveled: 0.00
+  feed: feed1
+
+shape_two_2:
+  io_id: '_shape_two'
+  pt_lat: 2.22
+  pt_lon: 2.22
+  pt_sequence: 2
+  dist_traveled: 2.22
+  feed: feed1
+
+
+shape_two_3:
+  io_id: '_shape_two'
+  pt_lat: 2.33
+  pt_lon: 2.33
+  pt_sequence: 3
+  dist_traveled: 2.33
+  feed: feed1

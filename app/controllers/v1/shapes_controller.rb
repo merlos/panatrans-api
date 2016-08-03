@@ -21,54 +21,53 @@
 # THE SOFTWARE.
 
 module V1
-  class TripsController < ApplicationController
-    before_action :set_trip, only: [:show, :update, :destroy]
+  class ShapesController < ApplicationController
 
+    #before_action :set_shape, only: [:show, :update, :destroy]
+    before_action :set_shape, only: [:show]
     #Note check_read_only_mode is defined in Application controller
-    before_action :check_read_only_mode, only: [:create, :update, :destroy]
+    #before_action :check_read_only_mode, only: [:create, :update, :destroy]
 
 
-    def index
-      @trips = GtfsApi::Trip.all.includes(:route)
-    end
 
     def show
-      @with_shape = %w(1 yes true).include?(params["with_shape"])
     end
 
-    def create
-      @trip = GtfsApi::Trip.new(trip_params)
-      if @trip.save
-        render :show, status: :created, location: v1_trip_path(@trip)
-      else
-       render_json_fail(:unprocessable_entity, @trip.errors)
-      end
-    end
+    #def create
+    #  @stop = GtfsApi::Stop.new(stop_params)
+    #  if @stop.save
+    #     render :show, status: :created, location: v1_stop_path(@stop)
+    #  else
+    #   render_json_fail(:unprocessable_entity, @stop.errors)
+    #  end
+    #end
 
-    def update
-      if @trip.update(trip_params)
-        render :show, status: :ok, location: v1_trip_path(@trip)
-      else
-        render_json_fail(:unprocessable_entity, @trip.errors)
-      end
-    end
+    #def update
+    #  if @stop.update(stop_params)
+    #    render :show, status: :ok, location: v1_stop_path(@stop)
+    #  else
+    #    render_json_fail(:unprocessable_entity, @stop.errors)
+    #  end
+    #end
 
-    def destroy
-      @trip.destroy
-      head :no_content
-    end
+    #def destroy
+    #  @stop.destroy
+    #  head :no_content
+    #end
+
 
     private
 
       # Use callbacks to share common setup or constraints between actions.
-      def set_trip
-        @trip = GtfsApi::Trip.find(params[:id])
+      def set_shape
+        @shape = GtfsApi::Shape.where(io_id: params[:io_id])
       end
 
       # Never trust parameters from the scary internet, only allow the white list through.
-      def trip_params
-        params.require(:trip).permit(:headsign, :direction, :route_id)
+      def shape_params
+        params.require(:shape).permit(:io_id)
       end
+
 
   end
 end

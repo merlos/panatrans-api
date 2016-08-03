@@ -1,0 +1,32 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+transfer_s1_s2:
+  from_stop: stop_one
+  to_stop: stop_two
+  transfer_type: 0
+  feed: feed1
+#  min_transfer_time: #not needed
+
+
+transfer_s2_s1:
+  from_stop: stop_two
+  to_stop: stop_one
+  transfer_type: 1
+  feed: feed1
+#  min_transfer_time: #not needed
+
+
+transfer_s3_s4:
+  from_stop: stop_three
+  to_stop: stop_four
+  transfer_type: 2
+  min_transfer_time: 3600
+  feed: feed1
+
+
+transfer_s4_s3:
+  from_stop: stop_four
+  to_stop: stop_three
+  transfer_type: 3
+  feed: feed1
+#  min_transfer_time:
