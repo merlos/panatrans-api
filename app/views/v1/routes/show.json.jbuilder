@@ -32,5 +32,13 @@ json.data do
       json.sequence sequence.stop_sequence
       json.stop sequence.stop, :id, :name, :lat, :lon
      end
+    if !@without_shapes
+      json.shape do
+        json.shape_id trip.shape_id
+        json.points trip.shapes do |shape_pt|
+          json.extract! shape_pt, :id, :pt_lat, :pt_lon, :pt_sequence
+        end
+      end
+    end
   end
 end

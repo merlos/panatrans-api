@@ -37,6 +37,7 @@ module V1
     end
 
     def show
+      @without_shapes = %w(1 yes true).include?(params["with_shapes"])
     end
 
     def create

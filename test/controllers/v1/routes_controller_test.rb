@@ -65,6 +65,15 @@ module V1
       xhr :get, :show, {id: r.id}
       assert_response :success
       assert_not_nil assigns(:route)
+      
+    end
+
+    test "should get a route without shapes" do
+      r = gtfs_api_routes(:route_one)
+      xhr :get, :show, {id: r.id, without_shapes: true}
+      assert_response :success
+      assert_not_nil assigns(:route)
+      assert_not_nil assigns(:without_shapes)
     end
 
     #

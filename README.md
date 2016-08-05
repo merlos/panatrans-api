@@ -149,7 +149,7 @@ Example:
 
 [https://test-panatrans.herokuapp.com/v1/routes/?prettify=true](https://test-panatrans.herokuapp.com/v1/routes/?prettify=true)
 
-### GET /routes/:id
+### GET /routes/:id[?without_shapes=true]
 Returns the detail of the route identified by `:id`.
 
 ```
@@ -175,10 +175,17 @@ Returns the detail of the route identified by `:id`.
         	}
         },
         ...
-      ]
-    },
-    ...
-  ]
+      ],
+			shape: [                # <--- Not sent if ?without_shapes=true
+				{"id": INT,
+				"pt_lat": LATITUDE,
+				"pt_lon":LONGITUDE,
+				"pt_sequence":INT}]
+				},
+    	...
+  		]
+		}, ...
+	]
 }
 ```
 * `LATITUDE` is a float within the interval (-90, 90).
