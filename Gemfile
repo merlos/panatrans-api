@@ -83,5 +83,6 @@ gem 'ruby_kml' # to export stops as kml
 gem 'andrewhao-gpx', '~> 0.8'
 
 gem 'gtfs-reader', git: "https://github.com/merlos/gtfs-reader.git", branch: 'master'
-gem 'gtfs_api', git:'https://github.com/merlos/gtfs-api.git', tag: 'v0.6.0', group: :production
+gem 'gtfs_api', git:'https://github.com/merlos/gtfs-api.git', branch: 'master'
+#gem 'gtfs_api', git:'https://github.com/merlos/gtfs-api.git', tag: 'v0.6.0', group: :production
 #gem 'gtfs_api', path: '../../panamapps/gtfs/gtfs_api', group: [:development, :test]
