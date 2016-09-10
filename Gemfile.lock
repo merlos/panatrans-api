@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/merlos/gtfs-api.git
-  revision: 4e3cdeeb8fcfd60e585e6568c9aa861e0953e957
-  tag: v0.6.0
+  revision: 289169b0166c7e460ee595fad905b27f58f905b3
+  branch: master
   specs:
     gtfs_api (0.0.1)
       andrewhao-gpx (~> 0.8)
