@@ -84,4 +84,4 @@ gem 'andrewhao-gpx', '~> 0.8'
 
 gem 'gtfs-reader', git: "https://github.com/merlos/gtfs-reader.git", branch: 'master'
 gem 'gtfs_api', git:'https://github.com/merlos/gtfs_api', branch: 'master', group: :production
-gem 'gtfs_api', path: '../../panamapps/gtfs/gtfs_api', group: [:development, :test]
+#gem 'gtfs_api', path: '../../panamapps/gtfs/gtfs_api', group: [:development, :test]
