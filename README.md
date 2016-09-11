@@ -9,20 +9,19 @@ API for the public bus tranportation system of Ciudad de Panamá (Panamá).
 [![Test Coverage](https://codeclimate.com/github/merlos/panatrans-api/badges/coverage.svg)](https://codeclimate.com/github/merlos/panatrans-api)
 
 ## About
-Panatrans is a collaborative project to allow the users of the panamenian public transport to create a dataset with the information of the stops and routes available in the City of Panama (which is currently inexistent).
+Panatrans is a collaborative project to allow the users of the Panamanian public transport to create a dataset with the information of the stops and routes available in the City of Panama (which was inexistent at the time the project started).
 
-This project is based in the premise that open software and open data are the key of innovation.
+This project is based on the premise that open software and open data are keys on innovation.
 
-Collaborative user generated content is another key concept of the project, and in that sense, the API provides universal read and write access to content.  
+Panatrans is divided in four components:
+
+1. __[gtfs_api](https://github.com/merlos/panatrans-dataset)__: The data model. It is an implementation of the [GTFS Specification](https://developers.google.com/transit/gtfs/reference/) in ruby on rails as an engine.  
+2. __[panatrans-api](https://github.com/merlos/panatrans-api)__: It is the server side that populates a JSON API based on the data model of gtfs_api. Also written in ruby on rails.
+2. __[panatrans-web](https://github.com/merlos/panatrans-web)__: A javascript web client that makes usage of panatrans-api. It is an angularjs application.
+3. __[panatrans-dataset](https://github.com/merlos/panatrans-dataset)__: It is the GTFS feed of the Panamanian public transport.
 
 
-Related Projects that may interest you:
-
-1. __[panatrans-dataset](https://github.com/merlos/panatrans-dataset)__: dataset to be used with this API.
-2. __[panatrans-web](https://github.com/merlos/panatrans-web)__: A javascript web client and editor that makes usage of this API.
-
-
-# API Specification V1.0 beta
+# API Specification V1.1 beta
 Specification for developers that plan to make a service or a mobile application based on this API.
 
 This is a JSON RESTful API.
@@ -39,11 +38,11 @@ There are 4 types of resources:
 
 * __Route__: Represents a bus route, for example: the route from Albrook to Miraflores.
 
-* __Trip__: A route generally has one or two trips. For example, the route Albrook - Miraflores has two trips: (1) the trip from Albrook to Miraflores, and (2) the trip from Miraflores to Albrook. Each trip has a set of stops. These set of stops may be the same or not for both trips. There may be some routes that only have a single trip, for example, circular routes that start and end at the same location.
+* __Trip__: A route generally has one trip.
 
-* __Stop_Sequence__: Links a trip with a stop to create an ordered list of stops. In the example, the trip Albrook to Miraflores has 4 stops, and therefore it has 4 `stop_sequences`, each one will link one of the stops with that trip. The first stop is Albrook (sequence = 0), then Diablo (sequence = 1), Ciudad del Saber (sequence = 2) and the last one Miraflores (sequence = 3).
+* __Stop_Sequence__: Links a trip with a stop to create an ordered list of stops. In the example, the trip Albrook to Miraflores has 4 stops, and therefore it has 4 `stop_sequences`, each one will link one of the stops with that trip. The first stop is Albrook (sequence = 0), then Diablo (sequence = 1), Ciudad del Saber (sequence = 2) and the last one Miraflores (sequence = 3). In GTFS language, `stop_times` are equivalent to `stop_sequences`.
 
-In any call to the API you'll be requesting any of these resources.
+In any call to the API you will be requesting any of these resources.
 
 ## Common stuff in API Responses
 
@@ -76,21 +75,6 @@ In every API response there is a "status". Possible values are:
 		}
 	}
 	```
-
-## Read only mode
-
-When the read only mode is activated any API method that modifies the database returns fail and a HTTP status 403 (Forbidden).  
-
-```json
-	# Example. Try to update stopname
-	# curl -X POST --data "stops[name]=2" http://test-panatrans.herokuapp.com/v1/stops/
-	# http status is 403 Forbidden
-	# and the medhod response
-	{
-		"status":"fail",
-		"error": ["Forbidden"]
-	}
-```
 
 Please see the configuration section below on this file for more info about this mode
 
@@ -197,40 +181,6 @@ Example:
 
 [http://test-panatrans.herokuapp.com/v1/routes/1048002442?prettify=true](http://test-panatrans.herokuapp.com/v1/routes/1048002442?prettify=true)
 
-
-### POST /routes/
-Creates a new route
-
-Post data structure:
-
-```
-{
- "route": {
- 	"name":  STRING,
-  "url": URL       # URL: http://www.mibus.com.pa/rutas/
-}
-```
-
-`url` is optional.
-
-If the request is successful, it returns the route detail of the new created resource (ie: same as GET /routes/:id).
-
-### DELETE /routes/:id
-Deletes the route with the id `:id`.
-
-The response is an HTTP code 200 (success) and an empty response body if the resource was sucessfully deleted.
-
-### PUT /routes/:id
-Updates a route.
-
-PUT data structure:
-```
-"route" {
-	"name": STRING,
-  "url": URL
-}
-```
-
 If the request is successful, it returns the route detail of the updated resource (ie: same as GET /routes/:id).
 
 ## STOPS
@@ -334,48 +284,6 @@ Example: Get stops close to the point (8.9656294,-79.5492239) and within a radiu
 http://test-panatrans.herokuapp.com/v1/stops/nearby?lat=8.9656294&lon=-79.5492239&radius=1000&prettify=true
 
 
-### POST /stops/
-Creates a new stop
-
-Request data structure:
-```
-{
- "stop" {
- 	 "name": STRING,
- 	 "lat": LATITUDE,
- 	 "lon": LONGITUDE
- }
-}
-```
-All fields are mandatory.
-
-If the request is successful, it returns the stop detail of the new created stop (GET /stop/:id).
-
-
-### PUT /stops/:id
-Updates the stop with the `:id` setting up the values of the request data.
-
-Request data structure:
-
-```
-{
- "stop" {
- 	 "name": STRING,
- 	 "lat": LATITUDE,
- 	 "lon": LONGITUDE
- }
-}
-```
-
-If the request is successful, it returns the stop detail of the updated resource (ie: same response as `GET /stops/:id`).
-
-
-
-### DELETE /stops/:id
-Deletes the stop with the id `:id`.
-
-If the resource was sucessfully deleted, the response is an HTTP code 200 (success) and an empty response body .
-
 
 ## TRIPS
 
@@ -446,46 +354,6 @@ A __stop without sequence__ number means that the stop belongs to that trip but 
 Example:
 [http://test-panatrans.herokuapp.com/v1/trips/1048002442?prettify=true](http://test-panatrans.herokuapp.com/v1/trips/1048002442?prettify=true)
 
-#### POST /trips/
-Creates a new trip.
-
-Post data structure:
-```
-{
-  "trip": {
-  	headsign: STRING,  # "hacia Albrook", "Circular", ...
-  	direction: INT,  # Possible values: 0 => go, 1 => return
-  	route_id: INT, # id of the route the trip belongs to
-}
-```
-All fields are mandatory.
-
-If the request is successful, it returns the trip detail of the new created resource (`GET /trips/:id`).
-
-
-#### PUT /trip/:id
-Updates an existing trip
-
-Post data structure:
-
-```
-{
-  "trip": {
-  	"headsign": STRING,
-  	"direction": INT,  # Possible values: 0 => go, 1 => return
-  }
-}
-```
-
-If the request is successful, it returns the trip detail of the updated resource (ie: same response as `GET /trips/:id`).
-
-
-#### DELETE /trips/:id
-Deletes the trip with the id `:id`.
-
-The response is an HTTP code 200 (success) and an empty response body if the resource was sucessfully deleted.
-
-
 
 ## STOP_SEQUENCES
 Stops sequences link stops to trips.
@@ -547,55 +415,6 @@ The first stop in a trip has `sequence = 0`.
 Example:
 
 http://test-panatrans.herokuapp.com/v1/stop_sequences/396371388?prettify=true
-
-### POST /stops_sequences/
-Creates a new stop sequence.
-
-POST structure:
-
-```
-stop_sequence: {
-	sequence: INT,
-  unknown_sequence: BOOL, # true = ignores `sequence` and sets it to nil
-  trip_id: INT,          # id of the stop to link to the trip
-  stop_id: INT           # id of the trip to link the stop.
-}
-```
-If the request is successful, it returns the stop sequence detail of the new created resource (i.e: `GET /stop_sequence/:id`).
-
-If `sequence` is not set and `unknown_sequence` is `false` or not set, then the server assigns this stop sequence the last position in trip.
-
-If `sequence`is set to 0 and `unknown_sequence`is `false` or not set, then the server assigns this stop sequence the first position in trip.
-
-
-#### PUT /stops_sequences/:id
-Updates a stops sequence.
-
-PUT structure, all the values are optional.
-
-```
-stop_sequence: {
-	sequence: INT,
-  unkown_sequence: BOOL, # true = ignores `sequence` and sets it to nil
-  trip_id: INT,          # id of the stop to link to the trip
-  stop_id: INT           # id of the trip to link the stop.
-}
-```
-
-If the request is successful, it returns the stop sequence detail of the updated resource (ie: same response as `GET /stop_sequences/:id`).
-
-See `POST /stop_sequences/` to know more about the usage of `sequence` and `unknown_sequence`.
-
-#### DELETE /stops_sequences/:id
-Removes a stop sequence.
-
-The response is an HTTP code 200 (success) and an empty response body if the resource was sucessfully deleted.
-
-
-#### DELETE /stop_sequences/trip/:trip_id/stop/:stop_id
-Deletes the stop_sequence that links the trip identified by `trip_id` and the stop identified by `stop_id`.
-
-The response is an HTTP code 200 (success) and an empty response body if the resource was sucessfully deleted.
 
 
 ## Export Calls
@@ -660,81 +479,24 @@ To create a local version of the server API run these commands:
  $ cd panatrans-api
  $ bundle install
  $ rake db:migrate
- $ rake dataset:update
+ $ rake gtfs:import[https://github.com/merlos/panatrans-dataset/archive/master.zip] # You can use any GTFS feed
+	 # ...
+	 # This may take a while
+	 # ...
  $ rails server
 ```
 
 Now you can open your browse at `http://localhost:3000/v1/`, and you'll see the list of API calls available.
 
-You may also want to check the [panatrans-web project](https://github.com/merlos/panatrans-web), that is a web client/editor that makes usage of this API.
-
-## Setup: step by step
-
-#### 1. Download
-
-To get the source code:
-
-```
-$ git clone https://github.com/merlos/panatrans-api.git
-```
-
-Then, install dependencies
-
-```
-$ bundle install
-```
-
-#### Database creation and initialization
-
-To create the database run the migrations:
-
-```
-  $ rake db:migrate
-```
-
-Then, you can:
-
-1. Load latest version of the panatrans-dataset:
-
-	```
-	$ rake dataset:update
-	```
-
-2. Initialize the database with test data:
-
-	```
-	$ rake dataset:fixtures
-	```
-
-	The loaded data is stored in `tests/fixtures/` in Yaml format.
-
-3. Import your own data. First, leave a copy of the csv files in the directory `./tmp/dataset/`. (see [panatrans-dataset](https://github.com/merlos/panatrans-dataset) project, for more info). Then import it:
-
-	```
-	$ rake dataset:import
-	```
-
-	Please note, that these files are overwritten if you perform a `rake dataset:update` or `rake dataset:download`.
-
-### Launch the server
-
-```
-$ rails server
-```
-This will launch a server in localhost:3000. All the API calls are at the /v1/ path, so you can open your browser on:
-
-```
-http://localhost:3000/v1/
-```
-
-And you`ll get a list of available API calls.
-
+You may also want to check the __[panatrans-web project](https://github.com/merlos/panatrans-web)__, a web client developed with [angularjs](https://angularjs.org/) that makes usage of this API.
 
 ## Configuration
 
 #### Read only mode (`read_only_mode`)
 
-Read only mode forbids change on the database made through JSON API calls. That is, it disables all the create, update, and delete actions.
+At this moment, the API only supports read calls (GET). In the future it will support create, update and delete calls.
+
+Read only mode will forbid to change on the database made through JSON API calls. That is, it will disable all the create, update, and delete actions.
 
 In order to activate the `read only mode` (by default is off), you just have to change the variable read_only_mode on the `config/application.rb` file.
 
@@ -745,6 +507,9 @@ In order to activate the `read only mode` (by default is off), you just have to 
 
 
 ## Rake tasks
+
+__TODO these tasks are deprecated and it is pending to clean them.
+Meanwhile you should use the rake tasks with the gtfs prefix (use rake -T to get them) documentation of these tasks is available on [gtfs_api project](http://github.com/merlos/gtfs_api)__
 
 This is the list of custom rake tasks developed for the project:
 
@@ -784,7 +549,8 @@ rake dataset:fixtures
 ## Changelog
 * March 2015. First release.
 * V1.0.0 April 2016. Added only read option (tag v1.0.0)
-* V2.0 June 2016. Now the ver
+* V1.1.0 September 2016. Support of GTFS backend. Disabled create, update and delete
+
 
 # License
 
