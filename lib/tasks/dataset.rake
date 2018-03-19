@@ -1,17 +1,17 @@
 # The MIT License (MIT)
-# 
+#
 # Copyright (c) 2015 Juan M. Merlos, panatrans.org
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,7 +20,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+require 'optparse'
 require_relative './dataset_helper'
+require "gtfs_api"
 
 namespace :dataset do
   desc "downloads dataset from git (TODO options: DATASET_GIT_URL=github.com/merlos/panatrans-dataset, DATASET_DIR=./tmp/dataset, DATASET_GIT_BRANCH=master]"
@@ -33,10 +35,26 @@ namespace :dataset do
     DatasetHelper.import #it is performed under a transaction, or imports everything or nothing
   end
 
+  desc "dumps current database into json files in ./tmp/ (options: rake dataset:json_dump -- --output_dir=./tmp/ --api_version=v1)"
+  task json_dump: :environment do
+    options = {
+      output_dir: "./tmp",
+      api_version: "v1"
+    }
+    opt_parse = OptionParser.new
+    opt_parse.banner = "Usage: rake dump_json -- [options]"
+    opt_parse.on("-o DIR", "--output_dir DIR") { |arg| options[:output_dir] = arg }
+    opt_parse.on("-v VER", "--api_version VER") { |arg| options[:api_version] = arg }
+    args = opt_parse.order!(ARGV) {}
+    opt_parse.parse!(args)
+    puts "  Dump will be exported with: #{options}" 
+    DatasetHelper.dump_json(options) #it is performed under a transaction, or imports everything or nothing
+  end
+
   desc "clears the database and then imports last downloaded csv files"
   task reset: :environment do
       Rake::Task["db:reset"].invoke # db:reset == db:drop + db:setup
-      Rake::Task["dataset:import"].invoke 
+      Rake::Task["dataset:import"].invoke
   end
 
   desc "updates dataset. First downloads it then resets it. Equivalent to dataset:download + dataset:reset"
